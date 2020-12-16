@@ -38,11 +38,11 @@ jobs:
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-      uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: serve.log
-        path: serve.log
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: serve.log
+          path: serve.log
       - name: Test
         run: yarn test
         env:
