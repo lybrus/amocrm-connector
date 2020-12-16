@@ -20,11 +20,11 @@ jobs:
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-          SERVER_PORT: ${{secrets.SERVER_PORT}}
+          SERVER_PORT: 3000
       - run: yarn tunnel > /dev/null &
         env:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-          SERVER_PORT: ${{secrets.SERVER_PORT}}
+          SERVER_PORT: 3000
       - name: Cypress run with env
         uses: cypress-io/github-action@v2
         env:
