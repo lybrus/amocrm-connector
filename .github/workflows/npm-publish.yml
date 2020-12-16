@@ -14,18 +14,20 @@ jobs:
       - run: yarn --frozen-lockfile
       - run: yarn lint
       - run: yarn build
-      - run: yarn serve > serve.log &
+      - name: Start server for oauth processing
+        run: yarn serve > serve.out 2 > serve.err &
         env:
           DOMAIN: ${{secrets.DOMAIN}}
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           SERVER_PORT: 3000
-      - run: yarn tunnel > /dev/null &
+      - name: Start tunnel
+        run: yarn tunnel > /dev/null &
         env:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           SERVER_PORT: 3000
-      - name: Cypress run with env
+      - name: Cypress
         uses: cypress-io/github-action@v2
         env:
           DOMAIN: ${{secrets.DOMAIN}}
@@ -33,16 +35,20 @@ jobs:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           USERNAME: ${{secrets.USERNAME}}
           PASSWORD: ${{secrets.PASSWORD}}
-      - uses: actions/upload-artifact@v1
+      - name: Cypress creenshots to artefacts (on error)
+        uses: actions/upload-artifact@v1
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-      - uses: actions/upload-artifact@v1
+      - name: Server logs to artefacts (on error)
+        uses: actions/upload-artifact@v1
         if: failure()
         with:
-          name: serve.log
-          path: serve.log
+          name: serve-logs
+          files:
+            - serve.out
+            - serve.err
       - name: Test
         run: yarn test
         env:
