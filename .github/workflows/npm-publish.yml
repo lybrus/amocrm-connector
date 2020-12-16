@@ -15,7 +15,7 @@ jobs:
       - run: yarn lint
       - run: yarn build
       - name: Start server for oauth processing
-        run: yarn serve > serve.out 2 > serve.err &
+        run: yarn serve > serve.out 2>serve.err &
         env:
           DOMAIN: ${{secrets.DOMAIN}}
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
