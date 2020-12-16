@@ -1,0 +1,52 @@
+name: Publish npm package
+
+on: push
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: yarn --frozen-lockfile
+      - run: yarn lint
+      - run: yarn build
+      - run: yarn serve > serve.log &
+        env:
+          DOMAIN: ${{secrets.DOMAIN}}
+          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+          SERVER_PORT: ${{secrets.SERVER_PORT}}
+      - run: yarn tunnel > /dev/null &
+        env:
+          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+          SERVER_PORT: ${{secrets.SERVER_PORT}}
+      - name: Cypress run with env
+        uses: cypress-io/github-action@v2
+        env:
+          DOMAIN: ${{secrets.DOMAIN}}
+          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
+          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+          USERNAME: ${{secrets.USERNAME}}
+          PASSWORD: ${{secrets.PASSWORD}}
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: serve.log
+        path: serve.log
+      - name: Test
+        run: yarn test
+        env:
+          DOMAIN: ${{secrets.DOMAIN}}
+#      - run: yarn publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
