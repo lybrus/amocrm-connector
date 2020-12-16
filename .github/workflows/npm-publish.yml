@@ -42,13 +42,13 @@ jobs:
           name: cypress-screenshots
           path: cypress/screenshots
       - name: Server logs to artefacts (on error)
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: serve-logs
-          files:
-            - serve.out
-            - serve.err
+          path: |
+            serve.out
+            serve.err
       - name: Test
         run: yarn test
         env:
