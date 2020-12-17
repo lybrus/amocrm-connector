@@ -50,7 +50,7 @@ jobs:
             serve.out
             serve.err
       - name: Test
-        run: yarn test
+        run: yarn jest
         env:
           DOMAIN: ${{secrets.DOMAIN}}
 #      - run: yarn publish
