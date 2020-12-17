@@ -35,6 +35,17 @@ jobs:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           USERNAME: ${{secrets.USERNAME}}
           PASSWORD: ${{secrets.PASSWORD}}
+      - name: Zip screenshots
+        if: failure()
+        run: zip -r screenshots.zip cypress/creenshots
+      - name: Send screenshots to telegram
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: screenshots.zip
+          message: hello
       - name: Test
         run: yarn jest
         env:
@@ -47,14 +58,6 @@ jobs:
           path: |
             serve.out
             serve.err
-      - name: Send screenshots to telegram
-        uses: appleboy/telegram-action@master
-        if: failure()
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          photo: cypress/creeenshots/*
-          message: hello
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
