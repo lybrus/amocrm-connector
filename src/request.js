@@ -1,15 +1,29 @@
 import bent from 'bent'
 
 class RequestError extends Error {
-    constructor(response) {
+    constructor(response, debug) {
         super('request exception, see response property')
         this.response = response
-        console.error(response)
+        if (process.env.NODE_ENV !== 'test' && !debug) console.error(response)
     }
 }
 
-export const request = async (method, url, data, headers) => {
-    let statusCode; let statusMessage; let responseHeaders; let getJson; let getText; let error = false
+export const request = async (method, url, data, headers, debug = undefined) => {
+    let statusCode
+    let statusMessage
+    let responseHeaders
+    let getJson
+    let getText
+    let error = false
+
+    if (debug) {
+        debug('Request', {
+            method,
+            url,
+            headers,
+            data
+        })
+    }
 
     try {
         const response = await bent(method.toUpperCase(), 200)(url, data, headers)
@@ -44,7 +58,11 @@ export const request = async (method, url, data, headers) => {
         data: responseData
     }
 
-    if (error && Math.floor(statusCode / 100) !== 2) throw new RequestError(response)
+    if (debug) {
+        debug('Response', response)
+    }
+
+    if (error && Math.floor(statusCode / 100) !== 2) throw new RequestError(response, debug)
 
     return response
 }
@@ -55,7 +73,8 @@ export const amoRequest = async ({
     path,
     data,
     token,
-    ifModifiedSince
+    ifModifiedSince,
+    debug = undefined
 }) => {
     const url = `https://${domain}.amocrm.ru${path}`
     const headers = {}
@@ -63,7 +82,7 @@ export const amoRequest = async ({
     if (token) headers.Authorization = `Bearer ${token}`
     if (ifModifiedSince) headers['If-Modified-Since'] = ifModifiedSince.toUTCString()
 
-    const response = await request(method, url, data, headers)
+    const response = await request(method, url, data, headers, debug)
 
     return response
 }

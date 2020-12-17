@@ -14,7 +14,8 @@ export class AmoCRM extends EventEmitter {
         token = undefined,
         options: {
             refreshTokenUpdateOffset = 86400,
-            store = undefined
+            store = undefined,
+            debug = false
         } = {}
     } = {}) {
         super()
@@ -23,7 +24,8 @@ export class AmoCRM extends EventEmitter {
         this.token = token
         this.options = {
             refreshTokenUpdateOffset,
-            store
+            store,
+            debug
         }
 
         this.store = new Store(store)
@@ -192,13 +194,16 @@ export class AmoCRM extends EventEmitter {
             if (updatedAt) ifModifiedSince = updatedAt
         }
 
+        const { options: { debug } } = this
+
         const response = await amoRequest({
             method,
             domain,
             path,
             data,
             token,
-            ifModifiedSince
+            ifModifiedSince,
+            debug: debug ? this.debug : false
         })
 
         const { statusCode } = response
@@ -214,5 +219,9 @@ export class AmoCRM extends EventEmitter {
         }
 
         return response
+    }
+
+    debug(title, data) {
+        console.log(`[DEBUG] AmoCRM - ${title},  ${new Date()}`, data)
     }
 }

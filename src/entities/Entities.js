@@ -49,7 +49,7 @@ class Entities extends EventEmitter {
             })}`
         })
         const { data, statusCode } = response
-        console.log(statusCode)
+
         if (statusCode === 204) return new EntityPack([])
 
         const { _embedded } = data

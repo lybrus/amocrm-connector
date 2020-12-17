@@ -57,7 +57,7 @@
         "rollup-plugin-babel": "^4.4.0"
     },
     "scripts": {
-        "test": "dotenv -e .env.test jest",
+        "jest": "dotenv -e .env.test jest",
         "lint": "eslint . --ext .js",
         "lint:fix": "eslint . --ext .js --fix",
         "clean": "rm -rf dist",
@@ -68,7 +68,8 @@
         "serve:auto": "babel-node -- testing/server.js",
         "serve": "dotenv -e .env.test yarn serve:auto",
         "tunnel:auto": "yarn run lt -p $SERVER_PORT -s $TUNNEL_SUBDOMAIN",
-        "tunnel": "dotenv -e .env.test yarn tunnel:auto"
+        "tunnel": "dotenv -e .env.test yarn tunnel:auto",
+        "test": "yarn cypress && yarn jest"
     },
     "husky": {
         "hooks": {

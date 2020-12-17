@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
-import { AmoCRM } from '../'
+import { AmoCRM } from '../src/AmoCRM'
 import fs from 'fs'
 import path from 'path'
 
@@ -10,7 +10,10 @@ export const amocrm = new AmoCRM({
         domain: process.env.DOMAIN,
         integrationId: process.env.INTEGRATION_ID,
         secretKey: process.env.SECRET_KEY,
-        redirectUri: `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt/`
+        redirectUri: `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt`
+    },
+    options: {
+        debug: process.env.DEBUG
     }
 })
 amocrm.on('token', token => {
