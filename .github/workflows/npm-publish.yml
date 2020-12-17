@@ -37,7 +37,7 @@ jobs:
           PASSWORD: ${{secrets.PASSWORD}}
       - name: Archive screenshots
         if: failure()
-        run: tar -czvf screenshots.tag.gz cypress/screenshots
+        run: tar -czvf screenshots.tar.gz cypress/screenshots
       - name: Send screenshots to telegram
         uses: appleboy/telegram-action@master
         if: failure()
