@@ -22,6 +22,7 @@ jobs:
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           SERVER_PORT: 3000
+          DEBUG: true
       - name: Start tunnel
         run: yarn tunnel > /dev/null &
         env:
