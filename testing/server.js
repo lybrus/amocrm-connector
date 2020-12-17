@@ -35,8 +35,6 @@ router.get('/', async ctx => {
 
     await amocrm.getToken({ code })
 
-    console.log('test')
-
     ctx.status = 200
     ctx.body = 'Access granted!'
 })
