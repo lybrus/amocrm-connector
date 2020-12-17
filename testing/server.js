@@ -36,7 +36,7 @@ router.get('/', async ctx => {
     await amocrm.getToken({ code })
 
     ctx.status = 200
-    ctx.body = 'Access grante'
+    ctx.body = 'Access granted!'
 })
 
 const port = process.env.SERVER_PORT || 3000
