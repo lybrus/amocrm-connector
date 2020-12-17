@@ -53,6 +53,7 @@ jobs:
           path: |
             serve.out
             serve.err
-#      - run: yarn publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}

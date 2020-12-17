@@ -13,7 +13,7 @@ export class AmoCRM extends EventEmitter {
         credential,
         token = undefined,
         options: {
-            refreshTokenUpdateOffset = 86400,
+            refreshTokenUpdateOffset = 0,
             store = undefined,
             debug = false
         } = {}
