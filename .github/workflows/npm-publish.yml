@@ -35,12 +35,6 @@ jobs:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           USERNAME: ${{secrets.USERNAME}}
           PASSWORD: ${{secrets.PASSWORD}}
-      - name: Cypress creenshots to artefacts (on error)
-        uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
       - name: Test
         run: yarn jest
         env:
