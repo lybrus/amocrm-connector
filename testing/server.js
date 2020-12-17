@@ -17,7 +17,9 @@ export const amocrm = new AmoCRM({
     }
 })
 amocrm.on('token', token => {
-    fs.writeFileSync(path.resolve(__dirname, 'token.json'), JSON.stringify(token))
+    const tokenPath = path.resolve(__dirname, 'token.json')
+    fs.writeFileSync(tokenPath, JSON.stringify(token))
+    console.log(`Saved token to ${tokenPath}`)
 })
 
 const app = new Koa()

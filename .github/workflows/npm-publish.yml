@@ -41,6 +41,10 @@ jobs:
         with:
           name: cypress-screenshots
           path: cypress/screenshots
+      - name: Test
+        run: yarn jest
+        env:
+          DOMAIN: ${{secrets.DOMAIN}}
       - name: Server logs to artefacts (on error)
         uses: actions/upload-artifact@v2
         if: failure()
@@ -49,10 +53,6 @@ jobs:
           path: |
             serve.out
             serve.err
-      - name: Test
-        run: yarn jest
-        env:
-          DOMAIN: ${{secrets.DOMAIN}}
 #      - run: yarn publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
