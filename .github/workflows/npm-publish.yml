@@ -15,7 +15,7 @@ jobs:
       - run: yarn lint
       - run: yarn build
       - name: Start server for oauth processing
-        run: yarn serve > serve.out 2>serve.err &
+        run: yarn serve > server.out 2>server.err &
         env:
           DOMAIN: ${{secrets.DOMAIN}}
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
@@ -35,29 +35,32 @@ jobs:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           USERNAME: ${{secrets.USERNAME}}
           PASSWORD: ${{secrets.PASSWORD}}
-      - name: Zip screenshots
+      - name: Archive screenshots
         if: failure()
-        run: zip -r screenshots.zip cypress/creenshots
+        run: tar -czvf screenshots.tag.gz cypress/creenshots
       - name: Send screenshots to telegram
         uses: appleboy/telegram-action@master
         if: failure()
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          document: screenshots.zip
-          message: hello
+          document: screenshots.tar.gz
+          message: Cypress failed
       - name: Test
         run: yarn jest
         env:
           DOMAIN: ${{secrets.DOMAIN}}
-      - name: Server logs to artefacts (on error)
-        uses: actions/upload-artifact@v2
+      - name: Archive server logs
+        if: failure()
+        run: tar -czvf server_logs.tar.gz server.out server.err
+      - name: Send screenshots to telegram
+        uses: appleboy/telegram-action@master
         if: failure()
         with:
-          name: serve-logs
-          path: |
-            serve.out
-            serve.err
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: server_logs.tar.gz
+          message: server logs
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
