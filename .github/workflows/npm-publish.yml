@@ -3,7 +3,7 @@ name: Test and publish
 on: push
 
 jobs:
-  publish-npm:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,6 +47,12 @@ jobs:
           path: |
             serve.out
             serve.err
+      - name: Send screenshots to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          photo: cypress/creeenshots/*
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
