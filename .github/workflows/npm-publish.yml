@@ -45,7 +45,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: screenshots.tar.gz
-          message: Cypress failed https://github.com/${{github.repository_owner}}/${{github.repository}}/runs/${{github.run_id}}?check_suite_focus=true
+          message: Cypress failed https://github.com/${{github.repository}}/actions/runs/
       - name: Test
         run: yarn jest
         env:
@@ -60,7 +60,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: server_logs.tar.gz
-          message: server logs https://github.com/${{github.repository_owner}}/${{github.repository}}/runs/${{github.run_id}}?check_suite_focus=true
+          message: server logs https://github.com/${{github.repository}}/actions/runs/
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
