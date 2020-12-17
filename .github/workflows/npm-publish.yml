@@ -49,10 +49,12 @@ jobs:
             serve.err
       - name: Send screenshots to telegram
         uses: appleboy/telegram-action@master
+        if: failure()
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           photo: cypress/creeenshots/*
+          message: hello
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
