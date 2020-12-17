@@ -45,7 +45,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: screenshots.tar.gz
-          message: Cypress failed
+          message: Cypress failed https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA/checks?check_suite_id=$GITHUB_CHECK_SUITE_ID
       - name: Test
         run: yarn jest
         env:
@@ -53,14 +53,14 @@ jobs:
       - name: Archive server logs
         if: failure()
         run: tar -czvf server_logs.tar.gz server.out server.err
-      - name: Send screenshots to telegram
+      - name: Send server logs to telegram
         uses: appleboy/telegram-action@master
         if: failure()
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: server_logs.tar.gz
-          message: server logs
+          message: server logs https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA/checks?check_suite_id=$GITHUB_CHECK_SUITE_ID
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
