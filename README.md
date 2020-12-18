@@ -19,7 +19,7 @@
 
 ## Начало работы
 
-###Установка
+### Установка
 
 ```shell
 yarn add amocrm-connector
