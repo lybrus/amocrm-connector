@@ -4,7 +4,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 
 export default {
-    input: 'src/AmoCRM.js',
+    input: 'src/AmoCRM/index.js',
     output: [
         {
             file: 'dist/bundle.cjs.js',
