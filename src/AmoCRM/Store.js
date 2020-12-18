@@ -8,7 +8,7 @@ export default class Store {
 
         if (!updatedAt) updatedAt = new Date()
 
-        await this.store.set(key, updatedAt, ttl)
+        await this.store.set(key, value, updatedAt, ttl)
     }
 
     async get(key) {

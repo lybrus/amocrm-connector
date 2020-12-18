@@ -64,7 +64,8 @@ export const request = async (method, url, data, headers, debug = undefined) => 
 
     if (error &&
         Math.floor(statusCode / 100) !== 2 && // accept all 2xx codes
-        statusCode !== 304 // accept 304, not modified
+        statusCode !== 304 && // accept 304, not modified
+        statusCode !== 429 // accept 429 to stop sending requests
     ) {
         throw new RequestError(response, debug)
     }

@@ -41,6 +41,8 @@ const server = app.listen(port, () => {
 
 process.on('SIGTERM', () => {
     server.close(async () => {
+        await amocrm.uninit()
+
         process.exit(0)
     })
 })
