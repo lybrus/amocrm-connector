@@ -40,7 +40,7 @@ class Entities extends EventEmitter {
 
         if (!base) return
 
-        const response = await this.amocrm.request({
+        const response = await this.amocrm.get({
             path: `${base}?${queryString.stringify({
                 limit,
                 page,

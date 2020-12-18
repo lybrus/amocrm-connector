@@ -1,9 +1,8 @@
 import Koa from 'koa'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
-import { AmoCRM } from '../src/AmoCRM'
-import fs from 'fs'
-import path from 'path'
+import { AmoCRM, events } from '../src/AmoCRM'
+import { saveToken } from './tokenStore'
 
 export const amocrm = new AmoCRM({
     credential: {
@@ -16,11 +15,7 @@ export const amocrm = new AmoCRM({
         debug: process.env.DEBUG
     }
 })
-amocrm.on('token', token => {
-    const tokenPath = path.resolve(__dirname, 'token.json')
-    fs.writeFileSync(tokenPath, JSON.stringify(token))
-    console.log(`Saved token to ${tokenPath}`)
-})
+amocrm.on(events.token, saveToken)
 
 const app = new Koa()
 const router = new Router()

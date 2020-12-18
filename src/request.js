@@ -1,7 +1,7 @@
 import bent from 'bent'
 
-class RequestError extends Error {
-    constructor(response, debug) {
+export class RequestError extends Error {
+    constructor(response, debug = false) {
         super('request exception, see response property')
         this.response = response
         if (process.env.NODE_ENV !== 'test' && !debug) console.error(response)
@@ -62,7 +62,12 @@ export const request = async (method, url, data, headers, debug = undefined) => 
         debug('Response', response)
     }
 
-    if (error && Math.floor(statusCode / 100) !== 2) throw new RequestError(response, debug)
+    if (error &&
+        Math.floor(statusCode / 100) !== 2 && // accept all 2xx codes
+        statusCode !== 304 // accept 304, not modified
+    ) {
+        throw new RequestError(response, debug)
+    }
 
     return response
 }
