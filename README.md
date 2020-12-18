@@ -289,8 +289,8 @@ const store = {
 
 ## Ошибки и пожелания
 
-Если в процессе использования вы обнаружили ошибку, расскажите о ней, откройте issue с подробным описанием [github](https://github.com/lybrus/amocrm-connector/issues).
-Спасибо за помощь в тестировании! :thumbsup: Если у вас есть пожелания, также открывайте issue! :eyes:
+Если в процессе использования вы обнаружили ошибку, расскажите о ней, откройте [issue](https://github.com/lybrus/amocrm-connector/issues) с подробным описанием.
+Спасибо за помощь в тестировании! :thumbsup: Если у вас есть пожелания, также открывайте [issue](https://github.com/lybrus/amocrm-connector/issues)! :eyes:
 
 ## Разработка
 
