@@ -9,6 +9,8 @@ class Entity extends EventEmitter {
         this.amocrm = amocrm
         this.owner = owner
         this.data = data
+
+        this.createProperties()
     }
 
     async save() {
@@ -19,6 +21,10 @@ class Entity extends EventEmitter {
     async load() {
         const pack = new EntityPack([this])
         await pack.load()
+    }
+
+    createProperties() {
+
     }
 }
 

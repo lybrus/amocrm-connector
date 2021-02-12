@@ -50,7 +50,7 @@ jobs:
         run: tar -czvf screenshots.tar.gz cypress/screenshots
       - name: Send screenshots to telegram (on failure)
         uses: appleboy/telegram-action@master
-        if: failure() && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: failure()
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
         run: tar -czvf server_logs.tar.gz server.out server.err
       - name: Send server logs to telegram (on failure)
         uses: appleboy/telegram-action@master
-        if: failure() && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: failure()
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
