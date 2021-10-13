@@ -1,5 +1,5 @@
 import request from './request'
-import {uninit} from './lifecycle'
+import { uninit } from './lifecycle'
 
 jest.mock('../request')
 
