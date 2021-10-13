@@ -3,7 +3,7 @@ import { amoRequest } from '~/request'
 const domain = process.env.DOMAIN
 
 describe('Request method', () => {
-    test('', async done => {
+    test('', async () => {
         try {
             await amoRequest({
                 domain,
@@ -13,7 +13,5 @@ describe('Request method', () => {
             const { response: { statusCode } } = e
             expect(statusCode).toBe(401)
         }
-
-        done()
     })
 })
