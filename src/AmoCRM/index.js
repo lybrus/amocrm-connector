@@ -11,6 +11,7 @@ export class AmoCRM extends EventEmitter {
         credential,
         token = undefined,
         options: {
+            refreshTokenOnRequest = true,
             refreshTokenUpdateOffset = 0,
             store = undefined,
             debug = false,
@@ -22,6 +23,7 @@ export class AmoCRM extends EventEmitter {
         this.credential = credential
         this.token = token
         this.options = {
+            refreshTokenOnRequest,
             refreshTokenUpdateOffset,
             store,
             debug,

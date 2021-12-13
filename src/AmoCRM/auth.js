@@ -4,27 +4,33 @@ import { REFRESH_TOKEN_LIFETIME } from '~/constants'
 export async function checkToken() {
     this.debug('Check token')
 
-    if (this.token) {
-        const {
-            accessUntil,
-            refresh,
-            refreshUntil
-        } = this.token
-        const now = new Date()
+    if (!this.token) return false
 
-        if (accessUntil && now < accessUntil) return
-        this.debug('Access token outdated', { accessUntil })
-        if (refreshUntil && now > refreshUntil) {
-            this.token = undefined
-            this.debug('Refresh token outdated')
-            return
-        }
+    const {
+        accessUntil,
+        refresh,
+        refreshUntil
+    } = this.token
+    const now = new Date()
 
-        this.debug('Refresh token')
-        this._tokenUpdating = true
-        await this.getToken({ refreshToken: refresh })
-        this._tokenUpdating = false
+    if (accessUntil && now < accessUntil) return true
+
+    this.debug('Access token outdated', { accessUntil })
+
+    if (!this.options.refreshTokenOnRequest) return false
+
+    if (refreshUntil && now > refreshUntil) {
+        this.token = undefined
+        this.debug('Refresh token outdated')
+        return false
     }
+
+    this.debug('Refresh token')
+    this._tokenUpdating = true
+    await this.getToken({ refreshToken: refresh })
+    this._tokenUpdating = false
+
+    return true
 }
 
 export async function getToken({

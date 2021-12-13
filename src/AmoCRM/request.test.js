@@ -12,10 +12,13 @@ describe('AmoCRM request', () => {
                 request,
                 credential: {},
                 options: {
-                    maxRequestsPerSecond: limit
+                    maxRequestsPerSecond: limit,
+                    refreshTokenOnRequest: true
                 },
                 _checkToken() {
-                }
+                    return true
+                },
+                debug() {}
             }
 
             // Chunk of request should pass limit control

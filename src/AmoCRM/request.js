@@ -16,7 +16,11 @@ export default async function request({
     let token, cachedValue, cacheKey
 
     if (useToken) {
-        await this._checkToken()
+        const success = await this._checkToken()
+        if (!success) {
+            this.debug('Valid token not found')
+            throw new Error('Request error: Valid token not found')
+        }
         token = this.token?.access
     }
 
