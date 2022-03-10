@@ -241,8 +241,11 @@ amocrm.request({method: 'DELETE', ...config})
 #### amocrm.account.get(withParams)
 
 Запрос [параметров аккаунта](https://www.amocrm.ru/developers/content/crm_platform/account-info)
+
 ```typescript
-async amocrm.account.get(withParams?: AccountWith | AccountWith[]): Promise<AccountInfo>
+import {AccountInfo} from './src/subsystems/Account/AccountInfo'
+
+async amocrm.account.get(withParams ? : AccountWith | AccountWith[]): Promise<AccountInfo>
 ```
 
 #### amocrm.chat.request(config)
