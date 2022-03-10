@@ -122,6 +122,7 @@ const token = {
 * [AmoDTO](#AmoDTO)
 * [AmoEntity](#AmoEntity)
 * [AmoLike](#AmoLike)
+* [Авторизация](#Авторизация)
 
 ### AmoCRM
 
@@ -152,42 +153,42 @@ const amocrm = new AmoCRM({
 
 Алиас для [amocrm.addListener(event, eventListener)](#amocrmaddlistenerevent-eventlistener)
 
-### amocrm.addListener(event, eventListener)
+#### amocrm.addListener(event, eventListener)
 
 ```typescript
 amocrm.addListener(event: 'token', eventListener: (token: AmoCRMToken) => void): void
 ```
 
-#### События
+##### События
 
 * `token` - при получении нового токена
 
-### amocrm.removeListener(event, eventListener)
+#### amocrm.removeListener(event, eventListener)
 
 ```typescript
 amocrm.addListener(event: 'token', eventListener: (token: AmoCRMToken) => void): void
 ```
 
-### amocrm.tokenIsActual()
+#### amocrm.tokenIsActual()
 
 ```typescript
 amocrm.tokenIsActual(): boolean
 ```
 
-### amocrm.getToken(options)
+#### amocrm.getToken(options)
 
 Запрашивает новый токен по коду авторизации или токену обновления
 ```typescript
 async amocrm.getToken(options: { code?: string, refreshToken?: string })): Promise<void>
 ```
 
-### amocrm.getOAuthLink(state, mode)
+#### amocrm.getOAuthLink(state, mode)
 
 ```typescript
 amocrm.getOAuthLink(state: string = '', mode: 'post_message' | 'popup' = 'post_message'): string
 ```
 
-### amocrm.request(config)
+#### amocrm.request(config)
 
 HTTP запрос к amocrm. Основано на библиотеке **[axios](https://github.com/axios/axios)**.
 
@@ -216,35 +217,35 @@ type AmoCRMRequestConfig<D = undefined> = AxiosRequestConfig<D> & {
     baseURL: string = `https://${this.credential.domain}.amocrm.ru`
 }
 ```
-### amocrm.get(config)
+#### amocrm.get(config)
 
 ```typescript
 amocrm.request({method: 'GET', ...config})
 ```
-### amocrm.post(config)
+#### amocrm.post(config)
 
 ```typescript
 amocrm.request({method: 'POST', ...config})
 ```
-### amocrm.patch(config)
+#### amocrm.patch(config)
 
 ```typescript
 amocrm.request({method: 'PATCH', ...config})
 ```
-### amocrm.delete(config)
+#### amocrm.delete(config)
 
 ```typescript
 amocrm.request({method: 'DELETE', ...config})
 ```
 
-### amocrm.account.get(withParams)
+#### amocrm.account.get(withParams)
 
 Запрос [параметров аккаунта](https://www.amocrm.ru/developers/content/crm_platform/account-info)
 ```typescript
 async amocrm.account.get(withParams?: AccountWith | AccountWith[]): Promise<AccountInfo>
 ```
 
-### amocrm.chat.request(config)
+#### amocrm.chat.request(config)
 
 HTTP запрос к api чатов
 Автоматически добавляет заголовки для авторизации запроса
@@ -252,26 +253,26 @@ HTTP запрос к api чатов
 async amocrm.chat.request<T = unknown, D = unknown>(config: AmoCRMRequestConfig<D>): Promise<AxiosResponse<T, D>>
 ```
 
-### amocrm.chat.get(config)
+#### amocrm.chat.get(config)
 
 ```typescript
 amocrm.chat.request({method: 'GET', ...config})
 ```
 
-### amocrm.chat.post(config)
+#### amocrm.chat.post(config)
 
 ```typescript
 amocrm.chat.request({method: 'POST', ...config})
 ```
 
-### amocrm.chat.checkSignature(body, signature)
+#### amocrm.chat.checkSignature(body, signature)
 
 Проверяет подпись для входящих запросов (вебхуков)
 ```typescript
 amocrm.chat.checkSignature(body: unknown, signature?: string | string[]): boolean
 ```
 
-### amocrm.chat.connectChannel(amojoId, title)
+#### amocrm.chat.connectChannel(amojoId, title)
 
 [Подключение канала чата в аккаунте](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Подключение-канала-чата-в-аккаунте)
 ```typescript
@@ -285,21 +286,21 @@ amojoId может быть получен следующим образом
 const {amojoId} = await amocrm.account.get(AccountWith.amojoId)
 ```
 
-### amocrm.chat.addMessage(scopeId, payload)
+#### amocrm.chat.addMessage(scopeId, payload)
 
 [Отправка или импорт сообщения](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Отправка-или-импорт-сообщения)
 ```typescript
 async amocrm.chat.addMessage(scopeId: string, addMessagePayload: AmoLike<AddMessagePayload>): Promise<AddMessageResponse>
 ```
 
-### amocrm.chat.deliveryStatus(scopeId, messageId, data)
+#### amocrm.chat.deliveryStatus(scopeId, messageId, data)
 
 [Обновление статуса доставки сообщения](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Обновление-статуса-доставки-сообщения)
 ```typescript
 async amocrm.chat.deliveryStatus(scopeId: string, messageId: string, deliveryStatusRequest: AmoLike<DeliveryStatusRequest>): Promise<void>
 ```
 
-### amocrm.chat.typing(scopeId, data)
+#### amocrm.chat.typing(scopeId, data)
 
 [Передача информации о печатании](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Передача-информации-о-печатание)
 ```typescript
