@@ -243,10 +243,10 @@ amocrm.request({method: 'DELETE', ...config})
 Запрос [параметров аккаунта](https://www.amocrm.ru/developers/content/crm_platform/account-info)
 
 ```typescript
-import {AccountInfo} from './src/subsystems/Account/AccountInfo'
-
 async amocrm.account.get(withParams ? : AccountWith | AccountWith[]): Promise<AccountInfo>
 ```
+
+[AccountInfo](src/subsystems/Account/AccountInfo.ts)
 
 #### amocrm.chat.request(config)
 
@@ -296,6 +296,9 @@ const {amojoId} = await amocrm.account.get(AccountWith.amojoId)
 async amocrm.chat.addMessage(scopeId: string, addMessagePayload: AmoLike<AddMessagePayload>): Promise<AddMessageResponse>
 ```
 
+[AddMessagePayload](src/subsystems/Chat/Message/AddMessagePayload.ts)
+[AddMessageResponse](src/subsystems/Chat/Message/AddMessageResponse.ts)
+
 #### amocrm.chat.deliveryStatus(scopeId, messageId, data)
 
 [Обновление статуса доставки сообщения](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Обновление-статуса-доставки-сообщения)
@@ -303,12 +306,16 @@ async amocrm.chat.addMessage(scopeId: string, addMessagePayload: AmoLike<AddMess
 async amocrm.chat.deliveryStatus(scopeId: string, messageId: string, deliveryStatusRequest: AmoLike<DeliveryStatusRequest>): Promise<void>
 ```
 
+[DeliveryStatusRequest](src/subsystems/Chat/DeliveryStatus.ts)
+
 #### amocrm.chat.typing(scopeId, data)
 
 [Передача информации о печатании](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Передача-информации-о-печатание)
 ```typescript
 async amocrm.chat.typing(scopeId: string, typingRequest: AmoLike<TypingRequest>)
 ```
+
+[TypingRequest](src/subsystems/Chat/Typing.ts)
 
 ### AmoDTO
 
@@ -402,6 +409,18 @@ type AmoLike<T extends AmoDTO = AmoDTO> = T | DeepPartial<T>
 тестировании! :thumbsup: Если у вас есть пожелания, также
 открывайте [issue](https://github.com/lybrus/amocrm-connector/issues)! :eyes:
 
+## Планы
+
+* Покрыть все методы api
+* Реализовать унифицированный механизм работы с сущностями (Leads, Contacts, Pipelines, Companies, Catalogs, ...)
+    * create(data: AmoEntity | AmoEntity[])
+    * find(type: typeof AmoEntity, findOptions)
+    * findOne(type: typeof AmoEntity, findOptionsOrId)
+    * update(data: AmoEntity | AmoEntity[])
+    * delete(data: AmoEntity | AmoEntity[])
+* Валидация AmoDTO
+
+
 ## Разработка
 
 ### Команды
@@ -416,7 +435,7 @@ type AmoLike<T extends AmoDTO = AmoDTO> = T | DeepPartial<T>
     * Создать туннель с публичного адреса на ваш локальный сервер.
 * `yarn cypress:open` запуск cypress тестов в интерактивном режиме. Необходима настройка окружения.
 * `yarn jest` запуск jest тестов. Для работы необходимо настроить окружение, а также токен в testing/token.json. Поэтому
-  полезно сначала запустить cypress тест.
+  полезно сначала запустить cypress тест. [Пока тестов нет]
 * `yarn test` запуск cypress и jest тестов
 
 ### Настройка окружения
