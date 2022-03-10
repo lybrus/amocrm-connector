@@ -1,4 +1,5 @@
 import {metadataStore} from '~/metadataStore'
+import {AmoDTO} from './AmoDTO'
 
 
 export type AmoEntityIdType = number | string
@@ -10,13 +11,15 @@ const getIdPropertyName = (amoEntity: AmoEntity<any>): string => {
     return idPropertyName
 }
 
-export class AmoEntity<T extends AmoEntityIdType> {
-    constructor(id: T) {
-        //super()
+export class AmoEntity<T extends AmoEntityIdType> extends AmoDTO {
+    constructor(id?: T) {
+        super()
 
-        const idPropertyName = getIdPropertyName(this) as keyof this
-        // @ts-ignore
-        this[idPropertyName] = id
+        if (id) {
+            const idPropertyName = getIdPropertyName(this) as keyof this
+            // @ts-ignore
+            this[idPropertyName] = id
+        }
     }
 
     getId(): T {

@@ -10,7 +10,7 @@ const loadValue = (propertyDescription: PropertyDescription, rawValue: JSONType)
 
     if (isAmoEntity(type) && isNotArray(rawValue)) {
         if (!(typeof rawValue === 'string' || typeof rawValue === 'number'))
-            throw new Error(`AmoEntity id must be string or number, got ${rawValue}`)
+            return importFromRawData(type, rawValue as JSONObjectOrArray)
         return new type(rawValue)
     }
     if (isAmoDTO(type) && rawValue) return importFromRawData(type, rawValue as JSONObjectOrArray)
