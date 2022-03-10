@@ -1,7 +1,7 @@
+import AmoCRM from '..'
 import Koa from 'koa'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
-import { AmoCRM, events } from '../src/AmoCRM'
 import { saveToken } from './tokenStore'
 
 export const amocrm = new AmoCRM({
@@ -10,12 +10,9 @@ export const amocrm = new AmoCRM({
         integrationId: process.env.INTEGRATION_ID,
         secretKey: process.env.SECRET_KEY,
         redirectUri: `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt`
-    },
-    options: {
-        debug: process.env.DEBUG
     }
 })
-amocrm.on(events.token, saveToken)
+amocrm.on('token', saveToken)
 
 const app = new Koa()
 const router = new Router()

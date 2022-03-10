@@ -19,8 +19,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: yarn --frozen-lockfile
-      - name: Lint
-        run: yarn lint
       - name: Build (build needed for cypress)
         run: yarn build
       - name: Start server for oauth processing
@@ -56,10 +54,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           document: screenshots.tar.gz
           message: Cypress failed https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
-      - name: Run jest tests
-        run: yarn jest
-        env:
-          DOMAIN: ${{secrets.DOMAIN}}
       - name: Archive server logs (on failure)
         if: failure()
         run: tar -czvf server_logs.tar.gz server.out server.err

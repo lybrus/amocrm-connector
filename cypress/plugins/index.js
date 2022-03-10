@@ -18,7 +18,8 @@ const tunnelSubdomain = process.env.TUNNEL_SUBDOMAIN
 const username = process.env.USERNAME
 const password = process.env.PASSWORD
 
-const { AmoCRM } = require('../../')
+const AmoCRM = require('../../').default
+
 const amocrm = new AmoCRM({
     credential: {
         domain,
