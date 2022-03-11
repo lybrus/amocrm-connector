@@ -130,20 +130,20 @@ const token = {
 const amocrm = new AmoCRM({
     credential: {
         // Домен вашего аккаунта. Ссылка на ваш аккаунт выглядит как https://[domain].amocrm.ru
-        domain,
+        domain: string,
         // ID интеграции из "ключи и доступы" вашей интеграции
-        integrationId,
+        integrationId: string,
         // Секретный ключ из "ключи и доступы" вашей интеграции
-        secretKey,
+        secretKey: string,
         // url из настроек вашей интеграции
-        redirectUri,
+        redirectUri: string,
         // Секретный ключ канала чатов (secret_key)
-        chatSecret,
+        chatSecret?: string,
         // id зарегистрированного канала чатов
-        chatId
+        chatId?: string
     },
     // необязательный параметр, объект токена полученный ранее
-    token
+    token: AmoCRMToken
 })
 ```
 
