@@ -3,5 +3,5 @@ import {Prop} from '~/decorators'
 
 export class ChatWebhookSource extends AmoDTO {
     @Prop()
-    externalId: string
+    externalId!: string
 }

@@ -4,23 +4,23 @@ import {MessageType} from '../MessageType'
 
 class AddMessageContentLocation extends AmoDTO {
     @Prop()
-    lon: number
+    lon!: number
 
     @Prop()
-    lat: number
+    lat!: number
 }
 
 class AddMessageContentContact extends AmoDTO {
     @Prop()
-    name: string
+    name!: string
 
     @Prop()
-    phone: string
+    phone!: string
 }
 
 export class AddMessageContent extends AmoDTO {
     @Prop({enum: MessageType})
-    type: MessageType
+    type!: MessageType
 
     @Prop({optional: true})
     text?: string

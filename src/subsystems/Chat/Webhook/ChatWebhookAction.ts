@@ -4,5 +4,5 @@ import {ChatWebhookActionTyping} from './ChatWebhookActionTyping'
 
 export class ChatWebhookAction extends AmoDTO {
     @Prop()
-    typing: ChatWebhookActionTyping
+    typing!: ChatWebhookActionTyping
 }

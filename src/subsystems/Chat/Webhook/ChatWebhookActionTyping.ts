@@ -6,11 +6,11 @@ import {ChatWebhookMessageConversation} from './ChatWebhookMessageConversation'
 
 export class ChatWebhookActionTyping extends AmoDTO {
     @Prop()
-    user: ChatWebhookSender
+    user!: ChatWebhookSender
 
     @Prop()
-    conversation: ChatWebhookMessageConversation
+    conversation!: ChatWebhookMessageConversation
 
     @Prop({serializer: DateSerializerTimestamp})
-    expiredAt: Date
+    expiredAt!: Date
 }

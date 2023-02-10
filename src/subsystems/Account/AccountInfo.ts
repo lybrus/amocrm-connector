@@ -5,7 +5,7 @@ import {AmoDTO, AmoEntity} from '~/core'
 export class User extends AmoEntity<number> {
     @Id()
     @Prop()
-    id: number
+    id!: number
 }
 
 enum CustomerMode {
@@ -23,58 +23,58 @@ enum ContactNameDisplayOrder {
 
 export class AccountInfo extends AmoDTO {
     @Prop()
-    id: number
+    id!: number
 
     @Prop()
-    name: string
+    name!: string
 
     @Prop()
-    subdomain: string
+    subdomain!: string
 
     @Prop({serializer: DateSerializerTimestamp})
-    createdAt: Date
+    createdAt!: Date
 
     @Prop()
-    createdBy: User
+    createdBy!: User
 
     @Prop({serializer: DateSerializerTimestamp})
-    updatedAt: Date
+    updatedAt!: Date
 
     @Prop()
-    updatedBy: User
+    updatedBy!: User
 
     @Prop('current_user_id')
-    currentUser: User
+    currentUser!: User
 
     @Prop()
-    country: string
+    country!: string
 
     @Prop()
-    currency: string
+    currency!: string
 
     @Prop()
-    currencySymbol: string
+    currencySymbol!: string
 
     @Prop({enum: CustomerMode, optional: true})
     customerMode?: CustomerMode
 
     @Prop()
-    isUnsortedOn: boolean
+    isUnsortedOn!: boolean
 
     @Prop()
-    mobileFeatureVersion: number
+    mobileFeatureVersion!: number
 
     @Prop()
-    isLossReasonEnabled: boolean
+    isLossReasonEnabled!: boolean
 
     @Prop('is_helpbot_enabled')
-    isHelpBotEnabled: boolean
+    isHelpBotEnabled!: boolean
 
     @Prop()
-    isTechnicalAccount: boolean
+    isTechnicalAccount!: boolean
 
     @Prop()
-    contactNameDisplayOrder: ContactNameDisplayOrder
+    contactNameDisplayOrder!: ContactNameDisplayOrder
 
     @Prop({optional: true})
     amojoId?: string

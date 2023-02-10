@@ -7,16 +7,16 @@ export enum MessageMarkupMode {
 
 export class ChatWebhookMessageMarkupButton extends AmoDTO {
     @Prop()
-    text: string
+    text!: string
 
     @Prop()
-    url: string
+    url!: string
 }
 
 export class ChatWebhookMessageMarkup extends AmoDTO {
     @Prop({enum: MessageMarkupMode})
-    mode: MessageMarkupMode
+    mode!: MessageMarkupMode
 
     @Prop({type: ChatWebhookMessageMarkupButton})
-    buttons: ChatWebhookMessageMarkupButton[][]
+    buttons!: ChatWebhookMessageMarkupButton[][]
 }

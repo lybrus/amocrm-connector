@@ -6,11 +6,11 @@ import {ChatWebhookMessage} from './ChatWebhookMessage'
 
 export class ChatWebhookMessageRequest extends AmoDTO {
     @Prop()
-    accountId: string
+    accountId!: string
 
     @Prop({serializer: DateSerializerTimestamp})
-    time: Date
+    time!: Date
 
     @Prop()
-    message: ChatWebhookMessage
+    message!: ChatWebhookMessage
 }

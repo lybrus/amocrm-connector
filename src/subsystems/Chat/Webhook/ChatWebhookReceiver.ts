@@ -3,14 +3,14 @@ import {Prop} from '~/decorators'
 
 export class ChatWebhookReceiver extends AmoDTO {
     @Prop()
-    id: string
+    id!: string
 
     @Prop({optional: true})
-    phone: string
+    phone!: string
 
     @Prop({optional: true})
-    email: string
+    email!: string
 
     @Prop()
-    clientId: string
+    clientId!: string
 }

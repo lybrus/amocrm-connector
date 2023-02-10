@@ -11,13 +11,13 @@ export class AddMessageParticipantProfile extends AmoDTO {
 
 export class MessageParticipant extends AmoDTO {
     @Prop()
-    id: string
+    id!: string
 
     @Prop({optional: true})
     refId?: string
 
     @Prop()
-    name: string
+    name!: string
 
     @Prop({optional: true})
     avatar?: string

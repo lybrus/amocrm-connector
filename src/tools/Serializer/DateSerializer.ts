@@ -6,7 +6,7 @@ export class DateSerializer extends Serializer {
         super()
     }
 
-    serialize(value: Date): JSONType {
+    override serialize(value: Date): JSONType {
         switch(this.standard) {
             case 'timestamp':
                 return Math.round(+value/1000)
@@ -16,7 +16,7 @@ export class DateSerializer extends Serializer {
         return null
     }
 
-    deserialize(value: string | number): any {
+    override deserialize(value: string | number): any {
         switch(this.standard) {
             case 'timestamp':
                 if (typeof value === 'string') throw new Error('Timestamp should be a number')

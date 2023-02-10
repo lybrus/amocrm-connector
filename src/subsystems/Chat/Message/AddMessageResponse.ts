@@ -3,13 +3,13 @@ import {AmoDTO} from '~/core'
 
 class AddMessageResponseMessage extends AmoDTO {
     @Prop()
-    msgid: string
+    msgid!: string
 
     @Prop()
-    refId: string
+    refId!: string
 }
 
 export class AddMessageResponse extends AmoDTO {
     @Prop()
-    newMessage: AddMessageResponseMessage
+    newMessage!: AddMessageResponseMessage
 }

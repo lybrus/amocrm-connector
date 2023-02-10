@@ -7,9 +7,18 @@ import {AddMessagePayload, AddMessageResponse} from './Message'
 import {DeliveryStatusRequest} from './DeliveryStatus'
 import {TypingRequest} from './Typing'
 import {AmoLike} from '~/tools/types/AmoLike'
+import {Request} from 'express'
+import {ChatWebhookMessageRequest, ChatWebhookTypingRequest} from "~/subsystems/Chat/Webhook";
+import EventEmitter from "events";
 
+export interface ChatEvents {
+    'message': (scopeId: string, messageRequest: ChatWebhookMessageRequest) => void;
+    'typing': (scopeId: string, typingRequest: ChatWebhookTypingRequest) => void;
+}
 
 export class Chat extends Subsystem {
+    private eventEmitter = new EventEmitter()
+
     checkSignature(body: unknown, signature?: string | string[]): boolean {
         if (!signature || signature instanceof Array) return false
         const {amocrm} = this
@@ -99,6 +108,38 @@ export class Chat extends Subsystem {
             url: `/v2/origin/custom/${scopeId}/typing`,
             data: TypingRequest.export(typingRequestImported)
         })
+    }
+
+    handle(req: Request) {
+        const {scopeId} = req.params
+        const {body: data, headers} = req
+        const {message, action} = data
+
+        if (!this.checkSignature(data, headers['x-signature'])) return
+
+        // New message webhook
+        if (message) {
+            const messageRequest = ChatWebhookMessageRequest.import(data)
+
+            this.eventEmitter.emit('message', scopeId, messageRequest)
+        }
+
+        // Typing webhook
+        if (action) {
+            const typingRequest = ChatWebhookTypingRequest.import(data)
+
+            this.eventEmitter.emit('typing', scopeId, typingRequest)
+        }
+    }
+
+    on<U extends keyof ChatEvents>(event: U, listener: ChatEvents[U]): this {
+        this.eventEmitter.on(event, listener)
+        return this
+    }
+
+    removeListener<U extends keyof ChatEvents>(event: U, listener: ChatEvents[U]): this {
+        this.eventEmitter.removeListener(event, listener)
+        return this
     }
 }
 

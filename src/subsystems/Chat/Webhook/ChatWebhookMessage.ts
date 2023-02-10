@@ -9,16 +9,16 @@ import {ChatWebhookMessageContent} from './ChatWebhookMessageContent'
 
 export class ChatWebhookMessage extends AmoDTO {
     @Prop()
-    conversation: ChatWebhookMessageConversation
+    conversation!: ChatWebhookMessageConversation
 
     @Prop({optional: true})
     source?: ChatWebhookSource
 
     @Prop()
-    sender: ChatWebhookSender
+    sender!: ChatWebhookSender
 
     @Prop()
-    receiver: ChatWebhookReceiver
+    receiver!: ChatWebhookReceiver
 
     @Prop([
         {
@@ -30,8 +30,8 @@ export class ChatWebhookMessage extends AmoDTO {
             serializer: DateSerializerTimestamp
         }
     ])
-    date: Date
+    date!: Date
 
     @Prop()
-    message: ChatWebhookMessageContent
+    message!: ChatWebhookMessageContent
 }

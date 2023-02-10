@@ -3,22 +3,22 @@ import {Prop} from '~/decorators'
 
 export class ChatWebhookMessageTemplateParam extends AmoDTO {
     @Prop()
-    key: string
+    key!: string
 
     @Prop()
-    value: string
+    value!: string
 }
 
 export class ChatWebhookMessageTemplate extends AmoDTO {
     @Prop()
-    id: string
+    id!: string
 
     @Prop()
-    externalId: string
+    externalId!: string
 
     @Prop()
-    content: string
+    content!: string
 
     @Prop({type: ChatWebhookMessageTemplateParam})
-    params: ChatWebhookMessageTemplateParam[]
+    params!: ChatWebhookMessageTemplateParam[]
 }

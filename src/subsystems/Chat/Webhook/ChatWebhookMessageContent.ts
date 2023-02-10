@@ -6,31 +6,31 @@ import {ChatWebhookMessageTemplate} from './ChatWebhookMessageTemplate'
 
 export class ChatWebhookMessageContent extends AmoDTO {
     @Prop({optional: true})
-    id: string
+    id!: string
 
     @Prop({enum: MessageType})
-    type: MessageType
+    type!: MessageType
 
     @Prop()
-    text: string
+    text!: string
 
     @Prop()
-    tag: string
+    tag!: string
 
     @Prop()
-    media: string
+    media!: string
 
     @Prop()
-    mediaGroupId: string
+    mediaGroupId!: string
 
     @Prop()
-    thumbnail: string
+    thumbnail!: string
 
     @Prop()
-    fileName: string
+    fileName!: string
 
     @Prop()
-    fileSize: number
+    fileSize!: number
 
     @Prop()
     markup?: ChatWebhookMessageMarkup

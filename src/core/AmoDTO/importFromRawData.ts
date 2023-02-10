@@ -31,8 +31,11 @@ export const importFromRawData = <T extends typeof AmoDTO>(targetClass: T, rawDa
 
     for (const [propName, propertyDescriptions] of propertyDescriptionMap) {
         const propertyDescription = propertyDescriptions[0]
-        const {rawPropertyName} = propertyDescription
+        const rawPropertyName = propertyDescription?.rawPropertyName
+        if (!rawPropertyName) continue
+
         const rawValue = rawData[rawPropertyName]
+        if (!rawValue) continue
 
         result[propName as keyof InstanceType<T>] = loadValue(propertyDescription, rawValue)
     }

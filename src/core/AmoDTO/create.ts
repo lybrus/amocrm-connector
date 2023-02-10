@@ -15,7 +15,7 @@ export const create = <T extends typeof AmoDTO>(targetClass: T, amoLike: AmoLike
     for (const [propName, propertyDescriptions] of propertyDescriptionMap) {
         if (!(propName in amoLike)) continue
 
-        const {type} = propertyDescriptions[0]
+        const type = propertyDescriptions[0]?.type
         const rawValue = amoLike[propName as keyof DeepPartial<InstanceType<T>>]
         result[propName as keyof InstanceType<T>] =
             (isAmoDTO(type) ? create(type, rawValue) : rawValue) as InstanceType<T>[keyof InstanceType<T>]

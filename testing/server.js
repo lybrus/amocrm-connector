@@ -9,7 +9,7 @@ export const amocrm = new AmoCRM({
         domain: process.env.DOMAIN,
         integrationId: process.env.INTEGRATION_ID,
         secretKey: process.env.SECRET_KEY,
-        redirectUri: `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt`
+        redirectUri: process.env.REDIRECT_URI || `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt`
     }
 })
 amocrm.on('token', saveToken)
@@ -20,7 +20,7 @@ const router = new Router()
 router.use(koaBody())
 app.use(router.routes())
 
-router.get('/', async ctx => {
+router.get('/amo', async ctx => {
     const { code } = ctx.query
 
     if (!code) return

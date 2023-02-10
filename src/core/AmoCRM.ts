@@ -42,12 +42,12 @@ export class AmoCRM extends EventEmitter {
             redirect_uri: redirectUri
         }
         if (code) {
-            data.code = code
-            data.grant_type = 'authorization_code'
+            data['code'] = code
+            data['grant_type'] = 'authorization_code'
         }
         if (refreshToken) {
-            data.refresh_token = refreshToken
-            data.grant_type = 'refresh_token'
+            data['refresh_token'] = refreshToken
+            data['grant_type'] = 'refresh_token'
         }
 
         type AmoCRMTokenRequestResponse = {
@@ -101,7 +101,7 @@ export class AmoCRM extends EventEmitter {
         } = config
         if (!url) throw new Error('url is required')
 
-        if (useToken && this.token?.access) headers.Authorization = `Bearer ${this.token.access}`
+        if (useToken && this.token?.access) headers['Authorization'] = `Bearer ${this.token.access}`
         if (ifModifiedSince) headers['If-Modified-Since'] = ifModifiedSince.toUTCString()
 
         return axios({baseURL, headers, data, method, url, ...rest})
@@ -126,18 +126,18 @@ export class AmoCRM extends EventEmitter {
     account: Account = new Account(this)
     chat: Chat = new Chat(this)
 
-    on<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
-    on(event: string | symbol, listener: (...args: any[]) => void): this {
+    override on<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
+    override on(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.on(event, listener)
     }
 
-    addListener<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
-    addListener(event: string | symbol, listener: (...args: any[]) => void): this {
+    override addListener<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
+    override addListener(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.addListener(event, listener)
     }
 
-    removeListener<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
-    removeListener(event: string | symbol, listener: (...args: any[]) => void): this {
+    override removeListener<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
+    override removeListener(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.addListener(event, listener)
     }
 }

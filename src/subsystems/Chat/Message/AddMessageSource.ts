@@ -3,5 +3,5 @@ import {AmoDTO} from '~/core'
 
 export class AddMessageSource extends AmoDTO {
     @Prop()
-    externalId: string
+    externalId!: string
 }

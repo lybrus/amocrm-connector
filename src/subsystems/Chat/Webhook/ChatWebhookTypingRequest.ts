@@ -5,13 +5,13 @@ import {ChatWebhookAction} from './ChatWebhookAction'
 
 export class ChatWebhookTypingRequest extends AmoDTO {
     @Prop()
-    accountId: string
+    accountId!: string
 
     @Prop({serializer: DateSerializerTimestamp})
-    time: Date
+    time!: Date
 
     @Prop()
-    action: ChatWebhookAction
+    action!: ChatWebhookAction
 }
 
 // {

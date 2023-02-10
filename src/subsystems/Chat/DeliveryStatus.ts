@@ -19,17 +19,17 @@ export enum DeliveryErrorCode {
 
 export class DeliveryStatusRequest extends AmoDTO {
     @Prop()
-    scopeId: string
+    scopeId!: string
 
     @Prop()
-    messageId: string
+    messageId!: string
 
     @Prop({enum: DeliveryStatus})
-    deliveryStatus: DeliveryStatus
+    deliveryStatus!: DeliveryStatus
 
     @Prop({enum: DeliveryErrorCode})
-    errorCode: DeliveryErrorCode
+    errorCode!: DeliveryErrorCode
 
     @Prop()
-    error: string
+    error!: string
 }

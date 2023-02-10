@@ -3,8 +3,8 @@ import {Prop} from '~/decorators'
 
 export class ChatWebhookMessageConversation extends AmoDTO {
     @Prop()
-    id: string
+    id!: string
 
     @Prop()
-    clientId: string
+    clientId!: string
 }

@@ -4,8 +4,8 @@ import {MessageParticipant} from './Message'
 
 export class TypingRequest extends AmoDTO {
     @Prop()
-    conversationId: string
+    conversationId!: string
 
     @Prop()
-    sender: MessageParticipant
+    sender!: MessageParticipant
 }

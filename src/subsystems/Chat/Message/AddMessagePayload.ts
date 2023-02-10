@@ -7,16 +7,16 @@ import {AmoDTO} from '~/core'
 
 export class AddMessagePayload extends AmoDTO {
     @Prop('msgid')
-    id: string
+    id!: string
 
     @Prop([
         {rawPropertyName: 'timestamp', serializer: DateSerializerTimestamp},
         {rawPropertyName: 'msec_timestamp', serializer: DateSerializerUnixTime}
     ])
-    date: Date
+    date!: Date
 
     @Prop()
-    conversationId: string
+    conversationId!: string
 
     @Prop({optional: true})
     conversationRefId?: string
@@ -25,14 +25,14 @@ export class AddMessagePayload extends AmoDTO {
     silent: boolean = false
 
     @Prop({optional: true})
-    source: AddMessageSource
+    source!: AddMessageSource
 
     @Prop()
-    sender: MessageParticipant
+    sender!: MessageParticipant
 
     @Prop({optional: true})
     receiver?: MessageParticipant
 
     @Prop()
-    message: AddMessageContent
+    message!: AddMessageContent
 }
