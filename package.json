@@ -1,7 +1,7 @@
 {
     "name": "amocrm-connector",
     "description": "AmoCRM api connector for Node.js",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "repository": "git@github.com:lybrus/amocrm-connector.git",
     "homepage": "git@github.com:lybrus/amocrm-connector.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",
@@ -21,7 +21,6 @@
         "axios": "^0.26.0",
         "class-validator": "^0.13.2",
         "crypto-js": "^4.1.1",
-        "module-alias": "^2.2.2",
         "reflect-metadata": "^0.1.13"
     },
     "devDependencies": {
@@ -32,6 +31,7 @@
         "@babel/plugin-syntax-export-namespace-from": "^7.8.3",
         "@babel/preset-env": "^7.16.4",
         "@babel/preset-typescript": "^7.16.7",
+        "@ef-carbon/tspm": "^2.2.5",
         "@rollup/plugin-babel": "^5.3.0",
         "@rollup/plugin-commonjs": "^21.0.1",
         "@rollup/plugin-json": "^4.1.0",
@@ -62,6 +62,7 @@
         "clean": "rm -rf dist",
         "prebuild": "yarn clean",
         "build": "tsc",
+        "postbuild": "ef-tspm",
         "cypress:open": "dotenv -e .env.test cypress open",
         "cypress": "dotenv -e .env.test cypress run",
         "serve:auto": "babel-node -- testing/server.js",
