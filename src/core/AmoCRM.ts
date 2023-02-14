@@ -11,9 +11,14 @@ interface AmoCRMEventMap {
 export class AmoCRM extends EventEmitter {
     credential: AmoCRMCredential
     token?: AmoCRMToken
+    account: Account
+    chat: Chat
 
     constructor(options: AmoCRMOptions) {
         super()
+
+        this.account = new Account(this)
+        this.chat = new Chat(this)
 
         const {
             credential,
@@ -122,9 +127,6 @@ export class AmoCRM extends EventEmitter {
     delete<T = unknown, D = unknown>(config: AmoCRMRequestConfig<D>) {
         return this.request<T, D>({method: 'DELETE', ...config})
     }
-
-    account: Account = new Account(this)
-    chat: Chat = new Chat(this)
 
     override on<Event extends keyof AmoCRMEventMap>(event: Event, listener: (value: AmoCRMEventMap[Event]) => void): this
     override on(event: string | symbol, listener: (...args: any[]) => void): this {

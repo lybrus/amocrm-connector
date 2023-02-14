@@ -120,6 +120,7 @@ router.post('/amocrm-chat/:scopeId', async ctx => {
     const {body: data, headers} = ctx.request
     const {message, action} = data
 
+    if (!scopeId) return
     if (!amocrm.chat.checkSignature(data, headers['x-signature'])) return
 
     // New message webhook

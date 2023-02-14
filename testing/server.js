@@ -25,7 +25,11 @@ router.get('/amo', async ctx => {
 
     if (!code) return
 
-    await amocrm.getToken({ code })
+    try {
+        await amocrm.getToken({ code })
+    } catch (e) {
+        console.log(e)
+    }
 
     ctx.status = 200
     ctx.body = 'Access granted!'

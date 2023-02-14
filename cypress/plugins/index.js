@@ -36,8 +36,11 @@ module.exports = (on, config) => {
     // `config` is the resolved Cypress config
     on('task', {
         getParameters() {
+            const link = amocrm.getOAuthLink()
+            console.log(link)
+
             return {
-                link: amocrm.getOAuthLink(),
+                link,
                 username,
                 password,
                 domain

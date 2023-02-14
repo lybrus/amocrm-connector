@@ -111,7 +111,7 @@ export class Chat extends Subsystem {
     }
 
     handle(req: Request) {
-        const {scopeId} = req.params
+        const {scopeId} = req.query
         const {body: data, headers} = req
         const {message, action} = data
 
