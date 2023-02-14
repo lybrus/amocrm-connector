@@ -20,7 +20,7 @@ const router = new Router()
 router.use(koaBody())
 app.use(router.routes())
 
-router.get('/amo', async ctx => {
+router.get('/', async ctx => {
     const { code } = ctx.query
 
     if (!code) return
