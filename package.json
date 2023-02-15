@@ -43,11 +43,14 @@
         "@types/koa-router": "^7.4.4",
         "@types/localtunnel": "^2.0.1",
         "@types/module-alias": "^2.0.1",
+        "@typescript-eslint/eslint-plugin": "^5.52.0",
+        "@typescript-eslint/parser": "^5.52.0",
         "babel-jest": "^27.4.4",
         "babel-plugin-inline-json-import": "^0.3.2",
         "babel-plugin-root-import": "^6.6.0",
         "cypress": "^9.1.1",
         "dotenv-cli": "^4.1.1",
+        "eslint": "^8.34.0",
         "jest": "^27.4.4",
         "koa": "^2.13.4",
         "koa-body": "^4.2.0",
@@ -70,6 +73,7 @@
         "tunnel:auto": "yarn run lt -p $SERVER_PORT -s $TUNNEL_SUBDOMAIN",
         "tunnel": "dotenv -e .env.test yarn tunnel:auto",
         "test": "yarn cypress",
-        "example-chat": "dotenv -e .env.test ts-node-dev examples/chat.ts"
+        "example-chat": "dotenv -e .env.test ts-node-dev examples/chat.ts",
+        "lint": "eslint \"src/**/*.ts\" --fix"
     }
 }
