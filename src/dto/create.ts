@@ -16,7 +16,7 @@ export const create = <T extends typeof DTO>(targetClass: T, dtoLike: DTOLikeExt
         if (!(propName in dtoLike)) continue
 
         const type = propertyDescriptions[0]?.type
-        const rawValue = dtoLike[propName as keyof DeepPartial<InstanceType<T>>]
+        const rawValue = dtoLike[propName as keyof DeepPartial<InstanceType<T>>] as DeepPartial<InstanceType<T>>
         result[propName as keyof InstanceType<T>] =
             (isDTO(type) ? create(type, rawValue) : rawValue) as InstanceType<T>[keyof InstanceType<T>]
     }

@@ -58,7 +58,7 @@
         "localtunnel": "^2.0.2",
         "ts-node": "^10.5.0",
         "ts-node-dev": "^1.1.8",
-        "typescript": "^4.6.0-dev.20220211"
+        "typescript": "^4.9.5"
     },
     "scripts": {
         "jest": "dotenv -e .env.test jest",
