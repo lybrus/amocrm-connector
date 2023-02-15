@@ -4,6 +4,6 @@ export interface PropertyOptions {
     rawPropertyName?: string
     serializer?: Serializer
     type?: new () => any
-    enum?: Object,
+    enum?: any,
     optional?: boolean
 }

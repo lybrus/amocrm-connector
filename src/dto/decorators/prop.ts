@@ -21,7 +21,7 @@ const getPartialPropertyDescription = (rawPropertyNameOrOptions?: string | Prope
 }
 
 const getPropertyDescription = (
-    target: Object,
+    target: any,
     propertyKey: string,
     preliminaryDescription: PreliminaryPropertyDescription
 ): PropertyDescription => {
@@ -56,7 +56,7 @@ export function Prop(rawPropertyNameOrOptions?: string | PropertyOptions | Prope
         ? rawPropertyNameOrOptions.map(item => getPartialPropertyDescription(item))
         : [getPartialPropertyDescription(rawPropertyNameOrOptions)]
 
-    return (target: Object, propertyKey: string | symbol) => {
+    return (target: any, propertyKey: string | symbol) => {
         if (typeof propertyKey !== 'string') return
         const dtoDescriptionMap = metadataStore.getPropertyDescriptionMap(target, true)
         const description = preliminaryDescriptions.map(item => getPropertyDescription(target, propertyKey, item))
