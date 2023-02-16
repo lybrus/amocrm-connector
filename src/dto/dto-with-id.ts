@@ -18,7 +18,7 @@ export const isDTOWithId = (object: any): object is DTOWithId<any> => {
     return object instanceof DTOWithId
 }
 
-export class DTOWithId<T extends DTOIdType> extends DTO {
+export class DTOWithId<T extends DTOIdType = ''> extends DTO {
     constructor(id?: T) {
         super()
 

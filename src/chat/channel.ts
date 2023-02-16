@@ -48,10 +48,9 @@ export class Channel extends EventEmitter {
     checkSignature(body: unknown, signature?: string): boolean {
         if (!signature) return false
         const { secret } = this
-
-        return CryptoJS
-            .HmacSHA1(JSON.stringify(body), secret)
-            .toString(CryptoJS.enc.Hex)
+        return createHmac('sha1', secret)
+            .update(JSON.stringify(body))
+            .digest('hex')
             .toLowerCase() === signature
     }
 
