@@ -18,14 +18,16 @@ const tunnelSubdomain = process.env.TUNNEL_SUBDOMAIN
 const username = process.env.USERNAME
 const password = process.env.PASSWORD
 
-const AmoCRM = require('../../').default
+const { Client, Integration } = require('../../')
 
-const amocrm = new AmoCRM({
-    credential: {
-        domain,
-        integrationId,
-        redirectUri: `https://${tunnelSubdomain}.loca.lt`
-    }
+const integration = new Integration({
+    integrationId,
+    redirectUri: `https://${ tunnelSubdomain }.loca.lt`
+})
+
+const client = new Client({
+    integration,
+    domain
 })
 
 /**
@@ -36,8 +38,7 @@ module.exports = (on, config) => {
     // `config` is the resolved Cypress config
     on('task', {
         getParameters() {
-            const link = amocrm.getOAuthLink()
-            console.log(link)
+            const link = integration.getOAuthLink()
 
             return {
                 link,

@@ -19,14 +19,14 @@ export class DTO {
         return importFromRawData(this, rawData)
     }
 
-    static create<T extends typeof DTO>(this: T, amoLike: DeepPartial<InstanceType<T>>): InstanceType<T>
-    static create<T extends typeof DTO>(this: T, amoLike: NestedArray<DeepPartial<InstanceType<T>>>): NestedInstanceArray<T>
-    static create<T extends typeof DTO>(this: T, amoLike: InstanceType<T>): InstanceType<T>
-    static create<T extends typeof DTO>(this: T, amoLike: NestedArray<InstanceType<T>>): NestedInstanceArray<T>
-    static create<T extends typeof DTO>(this: T, amoLike: DTOLike<InstanceType<T>>): InstanceType<T>
-    static create<T extends typeof DTO>(this: T, amoLike: DTOLikeExtended<InstanceType<T>>): InstanceOrNestedArray<T>
-    static create<T extends typeof DTO>(this: T, amoLike: DTOLikeExtended<InstanceType<T>>): InstanceOrNestedArray<T> {
-        return create(this, amoLike)
+    static create<T extends typeof DTO>(this: T, dtoLike: DeepPartial<InstanceType<T>>): InstanceType<T>
+    static create<T extends typeof DTO>(this: T, dtoLike: NestedArray<DeepPartial<InstanceType<T>>>): NestedInstanceArray<T>
+    static create<T extends typeof DTO>(this: T, dtoLike: InstanceType<T>): InstanceType<T>
+    static create<T extends typeof DTO>(this: T, dtoLike: NestedArray<InstanceType<T>>): NestedInstanceArray<T>
+    static create<T extends typeof DTO>(this: T, dtoLike: DTOLike<InstanceType<T>>): InstanceType<T>
+    static create<T extends typeof DTO>(this: T, dtoLike: DTOLikeExtended<InstanceType<T>>): InstanceOrNestedArray<T>
+    static create<T extends typeof DTO>(this: T, dtoLike: DTOLikeExtended<InstanceType<T>>): InstanceOrNestedArray<T> {
+        return create(this, dtoLike)
     }
 
     static export<T extends DTO>(object: T): JSONObject
@@ -34,6 +34,18 @@ export class DTO {
     static export<T extends DTO>(object: ObjectOrNestedArray<T>): JSONObjectOrArray
     static export<T extends DTO>(object: ObjectOrNestedArray<T>): JSONObjectOrArray {
         return exportToRawData(object)
+    }
+
+    static process<T extends typeof DTO>(this: T, dtoLike: DeepPartial<InstanceType<T>>): JSONObject
+    static process<T extends typeof DTO>(this: T, dtoLike: NestedArray<DeepPartial<InstanceType<T>>>): NestedArray<JSONObject>
+    static process<T extends typeof DTO>(this: T, dtoLike: InstanceType<T>): JSONObject
+    static process<T extends typeof DTO>(this: T, dtoLike: NestedArray<InstanceType<T>>): NestedArray<JSONObject>
+    static process<T extends typeof DTO>(this: T, dtoLike: DTOLike<InstanceType<T>>): JSONObject
+    static process<T extends typeof DTO>(this: T, dtoLike: DTOLikeExtended<InstanceType<T>>): JSONObjectOrArray
+    static process<T extends typeof DTO>(this: T, dtoLike: DTOLikeExtended<InstanceType<T>>): JSONObjectOrArray
+    {
+        const data = this.create(dtoLike)
+        return this.export(data)
     }
 
     getRawData(): JSONObject {

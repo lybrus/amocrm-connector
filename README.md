@@ -17,14 +17,6 @@ amocrm. :ok_hand:
 * Частичное покрытие методов api
 * Работа с api чатов
 
-## Основные отличия версии 0.3.x от 0.2.x
-
-* Переход на TypeScript
-* Убраны механизмы контроля частоты запросов и автоматического обновления токена
-* Убрана поддержка стора
-* Добавлены подсистемы и описаны типы некоторых dto
-* Добавлена поддержка chat api
-
 ## Начало работы
 
 ### Установка
@@ -36,30 +28,38 @@ yarn add amocrm-connector
 ### Пример использования
 
 ```typescript
-import {AmoCRM, AmoCRMToken} from 'amocrm-connector'
+import { Integration, Client, Chat } from 'amocrm-connector'
 import rawToken from './token.json'
 
-const {accessUntil, ...rest} = rawToken
+const { accessUntil, ...rest } = rawToken
 const token = {
-    accessUntil: new Date(accessUntil),
-    ...rest
-}
+        accessUntil: new Date(accessUntil),
+        ...rest
+    }
 
 ;(async () => {
-    const amocrm = new AmoCRM({
-        credential: {
-            domain: 'your_domain',
-            integrationId: 'integration-id',
-            secretKey: 'secret-key',
-            redirectUri: 'redirect-uri'
-        },
-        token
+    const integration = new Integration({
+        integrationId: 'integration id',
+        secretKey: 'secret key',
+        redirectUri: 'redirect uri'
     })
 
-    const {amojoId} = await amocrm.account.get(AccountWith.amojoId)
+    const client = new Client({
+        integration,
+        domain: 'your_domain'
+    })
+
+    const { amojoId } = await client.account.get(AccountWith.amojoId)
     if (!amojoId) return
 
-    const scopeId = await amocrm.chat.connectChannel(amojoId, 'Название канала')
+    const chat = new Chat({
+        chatId: 'chat id'
+        chatSecret: 'chat secret',
+        title: 'channel title',
+        amojoId
+    })
+
+    const scopeId = await chat.connectChannel()
 
     const result = await amocrm.chat.addMessage(
         scopeId,
@@ -88,11 +88,17 @@ const token = {
 
 ## Документация
 
-### Создание объекта AmoCRM
-* [new AmoCRM(options)](#AmoCRM)
+### Создание объекта Integration
 
-### Методы AmoCRM
-* [amocrm.on(event, eventListener)](#amocrmonevent-eventlistener)
+* [new Integration(options)](#Integration)
+
+### Создание объекта Client
+
+* [new Client(options)](#Client)
+
+### Методы Client
+
+* [client.on(event, eventListener)](#amocrmonevent-eventlistener)
 * [amocrm.addListener(event, eventListener)](#amocrmaddlistenerevent-eventlistener)
 * [amocrm.removeListener(event, eventListener)](#amocrmremovelistenerevent-eventlistener)
 * [amocrm.tokenIsActual()](#amocrmtokenisactual)
@@ -105,58 +111,73 @@ const token = {
 * [amocrm.delete(config)](#amocrmdeleteconfig)
 
 ### Подсистемы
+
 #### Аккаунт
-* [amocrm.account.get(withParams)](#amocrmaccountgetwithparams)
+
+* [client.account.get(withParams)](#clientaccountgetwithparams)
 
 #### Чаты
-* [amocrm.chat.request(config)](#amocrmchatrequestconfig)
-* [amocrm.chat.get(config)](#amocrmchatgetconfig)
-* [amocrm.chat.post(config)](#amocrmchatpostconfig)
-* [amocrm.chat.checkSignature(body, signature)](#amocrmchatchecksignaturebody-signature)
-* [amocrm.chat.connectChannel(amojoId, title)](#amocrmchatconnectchannelamojoid-title)
-* [amocrm.chat.addMessage(scopeId, payload)](#amocrmchataddmessagescopeid-payload)
-* [amocrm.chat.deliveryStatus(scopeId, messageId, data)](#amocrmchatdeliverystatusscopeid-messageid-data)
-* [amocrm.chat.typing(scopeId, data)](#amocrmchattypingscopeid-data)
+
+* [new Chat(options)](#Chat)
+
+* [chat.request(config)](#chatrequestconfig)
+* [chat.get(config)](#chatgetconfig)
+* [chat.post(config)](#hatpostconfig)
+* [chat.checkSignature(body, signature)](#chatchecksignaturebody-signature)
+* [chat.connectChannel(title)](#chatconnectchannel-title)
+* [chat.addMessage(scopeId, payload)](#chataddmessagescopeid-payload)
+* [chat.deliveryStatus(scopeId, messageId, data)](#chatdeliverystatusscopeid-messageid-data)
+* [hat.typing(scopeId, data)](#chattypingscopeid-data)
 
 ### Прочее
-* [AmoDTO](#AmoDTO)
-* [AmoEntity](#AmoEntity)
-* [AmoLike](#AmoLike)
+
+* [DTO](#DTO)
+* [DTOWithId](#DTOWithId)
+* [DTOLike](#DTOLike)
 * [Авторизация](#Авторизация)
 
-### AmoCRM
+### Integration
 
 ```typescript
-const amocrm = new AmoCRM({
-    credential: {
-        // Домен вашего аккаунта. Ссылка на ваш аккаунт выглядит как https://[domain].amocrm.ru
-        domain: string,
-        // ID интеграции из "ключи и доступы" вашей интеграции
-        integrationId: string,
-        // Секретный ключ из "ключи и доступы" вашей интеграции
-        secretKey: string,
-        // url из настроек вашей интеграции
-        redirectUri: string,
-        // Секретный ключ канала чатов (secret_key)
-        chatSecret?: string,
-        // id зарегистрированного канала чатов
-        chatId?: string
-    },
+const integration = new Integration({
+    // ID интеграции из "ключи и доступы" вашей интеграции
+    integrationId: string,
+    // Секретный ключ из "ключи и доступы" вашей интеграции
+    secretKey: string,
+    // url из настроек вашей интеграции
+    redirectUri: string
+})
+```
+
+### Client
+
+```typescript
+const client = new Client({
+    // Итеграция
+    integration,
+    // Домен вашего аккаунта. Ссылка на ваш аккаунт выглядит как https://[domain].amocrm.ru
+    domain: string,
     // необязательный параметр, объект токена полученный ранее
-    token: AmoCRMToken
+    token
 })
 ```
 
 ### Методы
 
-#### amocrm.on(event, eventListener)
+#### client.on(event, eventListener)
 
-Алиас для [amocrm.addListener(event, eventListener)](#amocrmaddlistenerevent-eventlistener)
+Алиас для [client.addListener(event, eventListener)](#clientaddlistenerevent-eventlistener)
 
 #### amocrm.addListener(event, eventListener)
 
 ```typescript
-amocrm.addListener(event: 'token', eventListener: (token: AmoCRMToken) => void): void
+amocrm.addListener(event
+:
+'token', eventListener
+:
+(token: AmoCRMToken) => void
+):
+void
 ```
 
 ##### События
@@ -166,26 +187,48 @@ amocrm.addListener(event: 'token', eventListener: (token: AmoCRMToken) => void):
 #### amocrm.removeListener(event, eventListener)
 
 ```typescript
-amocrm.addListener(event: 'token', eventListener: (token: AmoCRMToken) => void): void
+amocrm.addListener(event
+:
+'token', eventListener
+:
+(token: AmoCRMToken) => void
+):
+void
 ```
 
 #### amocrm.tokenIsActual()
 
 ```typescript
-amocrm.tokenIsActual(): boolean
+amocrm.tokenIsActual()
+:
+boolean
 ```
 
 #### amocrm.getToken(options)
 
 Запрашивает новый токен по коду авторизации или токену обновления
+
 ```typescript
-async amocrm.getToken(options: { code?: string, refreshToken?: string })): Promise<void>
+async
+amocrm.getToken(options
+:
+{
+    code ? : string, refreshToken ? : string
+}
+)):
+Promise<void>
 ```
 
 #### amocrm.getOAuthLink(state, mode)
 
 ```typescript
-amocrm.getOAuthLink(state: string = '', mode: 'post_message' | 'popup' = 'post_message'): string
+amocrm.getOAuthLink(state
+:
+string = '', mode
+:
+'post_message' | 'popup' = 'post_message'
+):
+string
 ```
 
 #### amocrm.request(config)
@@ -193,49 +236,67 @@ amocrm.getOAuthLink(state: string = '', mode: 'post_message' | 'popup' = 'post_m
 HTTP запрос к amocrm. Основано на библиотеке **[axios](https://github.com/axios/axios)**.
 
 ```typescript
-async amocrm.request<T = unknown, D = unknown>(config: AmoCRMRequestConfig<D>): Promise<AxiosResponse<T, D>>
+async
+amocrm.request<T = unknown, D = unknown>(config
+:
+AmoCRMRequestConfig<D>
+):
+Promise < AxiosResponse < T, D >>
 
-type AmoCRMRequestConfig<D = undefined> = AxiosRequestConfig<D> & {
-    useToken?: boolean,
-    ifModifiedSince?: Date
+type
+AmoCRMRequestConfig < D = undefined > = AxiosRequestConfig<D> & {
+    useToken? : boolean,
+    ifModifiedSince? : Date
 }
 
 // Описание некоторых полей AmoCRMRequestConfig
 {
     // Добавлять ли заголовок Authorization
     useToken: boolean = true,
-    // Добавляет заголовок If-Modified-Since
-    ifModifiedSince?: Date,
-    // Тело запроса
-    data?: D,
-    // Заголовки запроса
-    headers: Record<string, string | number | boolean> = {},
-    // Метод запроса
-    method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',
-    // URL относительно BaseURL
-    url: string,
-    baseURL: string = `https://${this.credential.domain}.amocrm.ru`
+        // Добавляет заголовок If-Modified-Since
+        ifModifiedSince ? : Date,
+        // Тело запроса
+        data ? : D,
+        // Заголовки запроса
+        headers
+:
+    Record < string, string | number | boolean > = {},
+        // Метод запроса
+        method
+:
+    'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',
+        // URL относительно BaseURL
+        url
+:
+    string,
+        baseURL
+:
+    string = `https://${this.credential.domain}.amocrm.ru`
 }
 ```
+
 #### amocrm.get(config)
 
 ```typescript
-amocrm.request({method: 'GET', ...config})
+amocrm.request({ method: 'GET', ...config })
 ```
+
 #### amocrm.post(config)
 
 ```typescript
-amocrm.request({method: 'POST', ...config})
+amocrm.request({ method: 'POST', ...config })
 ```
+
 #### amocrm.patch(config)
 
 ```typescript
-amocrm.request({method: 'PATCH', ...config})
+amocrm.request({ method: 'PATCH', ...config })
 ```
+
 #### amocrm.delete(config)
 
 ```typescript
-amocrm.request({method: 'DELETE', ...config})
+amocrm.request({ method: 'DELETE', ...config })
 ```
 
 #### amocrm.account.get(withParams)
@@ -243,57 +304,101 @@ amocrm.request({method: 'DELETE', ...config})
 Запрос [параметров аккаунта](https://www.amocrm.ru/developers/content/crm_platform/account-info)
 
 ```typescript
-async amocrm.account.get(withParams ? : AccountWith | AccountWith[]): Promise<AccountInfo>
+async
+amocrm.account.get(withParams ? : AccountWith | AccountWith[])
+:
+Promise<AccountInfo>
 ```
 
 [AccountInfo](src/subsystems/Account/AccountInfo.ts)
+
+### Chat
+
+```typescript
+const client = new Chat({
+    // Секретный ключ канала чатов (secret_key)
+    chatSecret,
+    // id зарегистрированного канала чатов
+    chatId,
+    // Уникальный идентификатор аккаунта для работы с сервисом чатов amoJo
+    amojoId,
+    // Название канала по-умолчанию
+    title
+})
+````
 
 #### amocrm.chat.request(config)
 
 HTTP запрос к api чатов
 Автоматически добавляет заголовки для авторизации запроса
+
 ```typescript
-async amocrm.chat.request<T = unknown, D = unknown>(config: AmoCRMRequestConfig<D>): Promise<AxiosResponse<T, D>>
+asyncchat.request<T = unknown, D = unknown>(config
+:
+AmoCRMRequestConfig<D>
+):
+Promise<AxiosResponse<T, D>>
 ```
 
 #### amocrm.chat.get(config)
 
 ```typescript
-amocrm.chat.request({method: 'GET', ...config})
+amocrm.chat.request({ method: 'GET', ...config })
 ```
 
 #### amocrm.chat.post(config)
 
 ```typescript
-amocrm.chat.request({method: 'POST', ...config})
+amocrm.chat.request({ method: 'POST', ...config })
 ```
 
 #### amocrm.chat.checkSignature(body, signature)
 
 Проверяет подпись для входящих запросов (вебхуков)
+
 ```typescript
-amocrm.chat.checkSignature(body: unknown, signature?: string | string[]): boolean
+amocrm.chat.checkSignature(body
+:
+unknown, signature ? : string | string[]
+):
+boolean
 ```
 
 #### amocrm.chat.connectChannel(amojoId, title)
 
 [Подключение канала чата в аккаунте](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Подключение-канала-чата-в-аккаунте)
+
 ```typescript
-async amocrm.chat.connectChannel(amojoId: string, title: string): Promise<string>
+async
+amocrm.chat.connectChannel(amojoId
+:
+string, title
+:
+string
+):
+Promise<string>
 ```
 
 Возвращаемое значение - `scopeId`
 amojoId может быть получен следующим образом
 
 ```typescript
-const {amojoId} = await amocrm.account.get(AccountWith.amojoId)
+const { amojoId } = await amocrm.account.get(AccountWith.amojoId)
 ```
 
 #### amocrm.chat.addMessage(scopeId, payload)
 
 [Отправка или импорт сообщения](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Отправка-или-импорт-сообщения)
+
 ```typescript
-async amocrm.chat.addMessage(scopeId: string, addMessagePayload: AmoLike<AddMessagePayload>): Promise<AddMessageResponse>
+async
+amocrm.chat.addMessage(scopeId
+:
+string, addMessagePayload
+:
+AmoLike<AddMessagePayload>
+):
+Promise<AddMessageResponse>
 ```
 
 [AddMessagePayload](src/subsystems/Chat/Message/AddMessagePayload.ts)
@@ -302,8 +407,18 @@ async amocrm.chat.addMessage(scopeId: string, addMessagePayload: AmoLike<AddMess
 #### amocrm.chat.deliveryStatus(scopeId, messageId, data)
 
 [Обновление статуса доставки сообщения](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Обновление-статуса-доставки-сообщения)
+
 ```typescript
-async amocrm.chat.deliveryStatus(scopeId: string, messageId: string, deliveryStatusRequest: AmoLike<DeliveryStatusRequest>): Promise<void>
+async
+amocrm.chat.deliveryStatus(scopeId
+:
+string, messageId
+:
+string, deliveryStatusRequest
+:
+AmoLike<DeliveryStatusRequest>
+):
+Promise<void>
 ```
 
 [DeliveryStatusRequest](src/subsystems/Chat/DeliveryStatus.ts)
@@ -311,8 +426,15 @@ async amocrm.chat.deliveryStatus(scopeId: string, messageId: string, deliverySta
 #### amocrm.chat.typing(scopeId, data)
 
 [Передача информации о печатании](https://www.amocrm.ru/developers/content/chats/chat-api-reference#Передача-информации-о-печатание)
+
 ```typescript
-async amocrm.chat.typing(scopeId: string, typingRequest: AmoLike<TypingRequest>)
+async
+amocrm.chat.typing(scopeId
+:
+string, typingRequest
+:
+AmoLike<TypingRequest>
+)
 ```
 
 [TypingRequest](src/subsystems/Chat/Typing.ts)
@@ -320,6 +442,7 @@ async amocrm.chat.typing(scopeId: string, typingRequest: AmoLike<TypingRequest>)
 ### AmoDTO
 
 Цель данного класса - описать объекты передачи данных AmoCRM API. Какие задачи решает данный класс
+
 * Преобразование названий свойств camelCase <-> snake_case
 * Валидация объекта [нереализовано]
 * Типизация объекта
@@ -327,63 +450,67 @@ async amocrm.chat.typing(scopeId: string, typingRequest: AmoLike<TypingRequest>)
 
 ### AmoEntity
 
-AmoEntity - некая сущность обладающая уникальным идентификатором. Свойства содержащие ссылки (идентификаторы) на объекты такого типа при десериализации автоматически заменяются на объекты этого тип, и наоборот.
+AmoEntity - некая сущность обладающая уникальным идентификатором. Свойства содержащие ссылки (идентификаторы) на объекты
+такого типа при десериализации автоматически заменяются на объекты этого тип, и наоборот.
 
 ### AmoLike
 
-AmoDTO и AmoEntity - классы, и для передачи значений в методы api необходимо создать каждый объект, создать вложенные объекты и т.п.
+AmoDTO и AmoEntity - классы, и для передачи значений в методы api необходимо создать каждый объект, создать вложенные
+объекты и т.п.
 Это создает много лишнего кода. Для возможности более лаконичного описания передаваемого аргумента используется AmoLike.
+
 ```typescript
 type AmoLike<T extends AmoDTO = AmoDTO> = T | DeepPartial<T>
 ```
+
 Таким образом мы можем передавать в качестве аргумента как сам объект AmoDTO, так и плоский объект.
 
 #### Пример
 
 ```typescript
     // Плоский объект
-    const result = await amocrm.chat.addMessage(
-        scopeId,
-        {
-            date: new Date(),
-            // id беседы из вашей системы
-            conversationId: 'conversation-id',
-            sender: {
-                id: 'sender-id',
-                name: 'Имя клиента',
-                profile: {
-                    phone: '71234567890'
-                }
-            },
-            id: 'message-id',
-            message: {
-                type: MessageType.Text,
-                text: 'Тест сообщения'
+const result = await amocrm.chat.addMessage(
+    scopeId,
+    {
+        date: new Date(),
+        // id беседы из вашей системы
+        conversationId: 'conversation-id',
+        sender: {
+            id: 'sender-id',
+            name: 'Имя клиента',
+            profile: {
+                phone: '71234567890'
             }
+        },
+        id: 'message-id',
+        message: {
+            type: MessageType.Text,
+            text: 'Тест сообщения'
         }
-    )
+    }
+)
 
-    //AmoDTO
-    const result = await amocrm.chat.addMessage(
-        scopeId,
-        new AddMessagePayload({
-            date: new Date(),
-            // id беседы из вашей системы
-            conversationId: 'conversation-id',
-            sender: new MessageParticipant({
-                id: 'sender-id',
-                name: 'Имя клиента',
-                profile: new MessageParticipantProfile({
-                    phone: '71234567890'
-                })
-            }),
-            id: 'message-id',
-            message: new AddMessageContent({
-                type: MessageType.Text,
-                text: 'Тест сообщения'
+//AmoDTO
+const result = await amocrm.chat.addMessage(
+    scopeId,
+    new AddMessagePayload({
+        date: new Date(),
+        // id беседы из вашей системы
+        conversationId: 'conversation-id',
+        sender: new MessageParticipant({
+            id: 'sender-id',
+            name: 'Имя клиента',
+            profile: new MessageParticipantProfile({
+                phone: '71234567890'
             })
+        }),
+        id: 'message-id',
+        message: new AddMessageContent({
+            type: MessageType.Text,
+            text: 'Тест сообщения'
         })
-    )
+    })
+)
 ```
 
 ### Авторизация
@@ -397,9 +524,9 @@ type AmoLike<T extends AmoDTO = AmoDTO> = T | DeepPartial<T>
 
 1. Регистрация вашей интеграции
 2. Переход пользователя по ссылке выдачи доступа пользователем вашему приложению. Ссылку получить можно
-   методом `amocrm.getOAuthLink`
+   методом `client.getOAuthLink`
 3. Обработка запроса на redirect uri, здесь должен быть запущен ваш сервер. В виде гет параметра amocrm передаст код
-   авторизации. Его необходимо обменять на токен с помощью метода `amocrm.getToken`. Пример реализации смотрите в
+   авторизации. Его необходимо обменять на токен с помощью метода `client.getToken`. Пример реализации смотрите в
    файле `testing/server.js`
 
 ## Ошибки и пожелания
@@ -413,13 +540,12 @@ type AmoLike<T extends AmoDTO = AmoDTO> = T | DeepPartial<T>
 
 * Покрыть все методы api
 * Реализовать унифицированный механизм работы с сущностями (Leads, Contacts, Pipelines, Companies, Catalogs, ...)
-    * create(data: AmoEntity | AmoEntity[])
-    * find(type: typeof AmoEntity, findOptions)
-    * findOne(type: typeof AmoEntity, findOptionsOrId)
-    * update(data: AmoEntity | AmoEntity[])
-    * delete(data: AmoEntity | AmoEntity[])
-* Валидация AmoDTO
-
+    * create(data: DTOWithId | DTOWithId[])
+    * find(type: typeof DTOWithId, findOptions)
+    * findOne(type: typeof DTOWithId, findOptionsOrId)
+    * update(data: DTOWithId | DTOWithId[])
+    * delete(data: DTOWithId | DTOWithId[])
+* Валидация DTO
 
 ## Разработка
 

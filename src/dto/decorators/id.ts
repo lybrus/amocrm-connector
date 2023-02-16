@@ -1,5 +1,5 @@
 import { metadataStore } from '../metadata'
-import { DTOWithId } from '../dto-with-id'
+import { DTOWithId } from '..'
 
 export function Id(): PropertyDecorator {
     return (target: any, propertyKey: string | symbol) => {

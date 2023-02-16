@@ -89,11 +89,6 @@ export class Client extends EventEmitter {
         return this.token
     }
 
-    getOAuthLink(state = '', mode: 'post_message' | 'popup' = 'post_message') {
-        const { integrationId } = this.integration
-        return `https://www.amocrm.ru/oauth?client_id=${integrationId}&state=${state}&mode=${mode}`
-    }
-
     request<T = unknown, D = unknown>(config: ClientRequestConfig<D>): Promise<AxiosResponse<T, D>> {
         const {
             useToken = true,

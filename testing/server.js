@@ -1,18 +1,21 @@
-import AmoCRM from '..'
+import { Client, Integration } from '..'
 import Koa from 'koa'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
 import { saveToken } from './tokenStore'
 
-export const amocrm = new AmoCRM({
-    credential: {
-        domain: process.env.DOMAIN,
-        integrationId: process.env.INTEGRATION_ID,
-        secretKey: process.env.SECRET_KEY,
-        redirectUri: process.env.REDIRECT_URI || `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt`
-    }
+export const integration = new Integration({
+    integrationId: process.env.INTEGRATION_ID,
+    secretKey: process.env.SECRET_KEY,
+    redirectUri: process.env.REDIRECT_URI || `https://${ process.env.TUNNEL_SUBDOMAIN }.loca.lt`
 })
-amocrm.on('token', saveToken)
+
+export const client = new Client({
+    integration,
+    domain: process.env.DOMAIN
+})
+
+client.on('token', saveToken)
 
 const app = new Koa()
 const router = new Router()
@@ -26,7 +29,7 @@ router.get('/', async ctx => {
     if (!code) return
 
     try {
-        await amocrm.getToken({ code })
+        await client.getToken({ code })
     } catch (e) {
         console.log(e)
     }
@@ -37,7 +40,7 @@ router.get('/', async ctx => {
 
 const port = process.env.SERVER_PORT || 3000
 const server = app.listen(port, () => {
-    console.log(`listening port ${port}`)
+    console.log(`listening port ${ port }`)
 })
 
 process.on('SIGTERM', () => {

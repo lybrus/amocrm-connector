@@ -13,13 +13,13 @@ export enum AccountWith {
 }
 
 export class Account extends Subsystem {
-    async get(...withParams: AccountWith[]): Promise<AccountInfo>
-    async get(withParams: AccountWith[]): Promise<AccountInfo>
-    async get(): Promise<AccountInfo>
-    async get(...withParams: AccountWith[] | [AccountWith[]] | []): Promise<AccountInfo> {
-        const { amocrm } = this
+    async getAccountInfo(...withParams: AccountWith[]): Promise<AccountInfo>
+    async getAccountInfo(withParams: AccountWith[]): Promise<AccountInfo>
+    async getAccountInfo(): Promise<AccountInfo>
+    async getAccountInfo(...withParams: AccountWith[] | [AccountWith[]] | []): Promise<AccountInfo> {
+        const { client } = this
         if (withParams && (withParams[0] instanceof Array)) withParams = withParams[0]
-        const { data } = await amocrm.get<JSONObject, null>({
+        const { data } = await client.get<JSONObject, null>({
             params: {
                 'with': withParams?.join(',')
             },
