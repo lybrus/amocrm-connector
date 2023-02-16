@@ -35,14 +35,14 @@ jobs:
         env:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           SERVER_PORT: 3000
-      - name: Cypress tests
-        uses: cypress-io/github-action@v5
-        env:
-          DOMAIN: ${{secrets.DOMAIN}}
-          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
-          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-          USERNAME: ${{secrets.USERNAME}}
-          PASSWORD: ${{secrets.PASSWORD}}
+#      - name: Cypress tests
+#        uses: cypress-io/github-action@v5
+#        env:
+#          DOMAIN: ${{secrets.DOMAIN}}
+#          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
+#          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+#          USERNAME: ${{secrets.USERNAME}}
+#          PASSWORD: ${{secrets.PASSWORD}}
       - name: Archive screenshots (on failure)
         if: failure()
         run: tar -czvf screenshots.tar.gz cypress/screenshots

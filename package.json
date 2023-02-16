@@ -18,11 +18,14 @@
     "main": "dist/index.js",
     "module": "dist/index.js",
     "dependencies": {
+        "@babel/preset-env": "^7.20.2",
         "axios": "^0.26.0",
         "class-validator": "^0.13.2",
         "reflect-metadata": "^0.1.13"
     },
     "devDependencies": {
+        "@babel/core": "^7.20.12",
+        "@babel/node": "^7.20.7",
         "@types/jest": "^27.4.0",
         "@types/koa": "^2.13.5",
         "@types/localtunnel": "^2.0.1",
@@ -47,7 +50,7 @@
         "postbuild": "resolve-tspaths",
         "cypress:open": "dotenv -e .env.test cypress open",
         "cypress": "dotenv -e .env.test cypress run",
-        "serve:auto": "babel-node -- testing/server.js",
+        "serve:auto": "babel-node --  testing/server.js",
         "serve": "dotenv -e .env.test yarn serve:auto",
         "tunnel:auto": "yarn run lt -p $SERVER_PORT -s $TUNNEL_SUBDOMAIN",
         "tunnel": "dotenv -e .env.test yarn tunnel:auto",
