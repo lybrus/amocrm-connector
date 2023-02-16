@@ -36,7 +36,7 @@ jobs:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           SERVER_PORT: 3000
       - name: Cypress tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v5
         env:
           DOMAIN: ${{secrets.DOMAIN}}
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
