@@ -11,6 +11,7 @@
 
 import rawToken from '../testing/token.json'
 import express from 'express'
+import bodyParser from 'body-parser'
 import localtunnel from 'localtunnel'
 import {
     DeliveryErrorCode,
@@ -61,23 +62,23 @@ const senderId = 'sender-id'
     const chat = await channel.connectChannel(client)
 
     await chat.addMessage(
-    {
-        date: new Date(),
-        conversationId: 'converstation-id',
-        sender: {
-            id: senderId,
-            name: 'Client name',
-            profile: {
-                phone: '71234567890'
+        {
+            date: new Date(),
+            conversationId: 'converstation-id2',
+            sender: {
+                id: senderId,
+                name: 'Client name',
+                profile: {
+                    phone: '712345678901'
+                }
+            },
+            id: 'message-id',
+            message: {
+                type: MessageType.Text,
+                text: 'Message test'
             }
-        },
-        id: 'message-id',
-        message: {
-            type: MessageType.Text,
-            text: 'Message test'
         }
-    }
-)
+    )
 })()
 
 channel.on('message', (chat, messageRequest) => {
@@ -128,6 +129,7 @@ const sendReply = async (chat: Chat, message: ChatWebhookMessage) => {
 }
 
 const app = express()
+app.use(bodyParser.json())
 app.post('/amo/:scopeId', async (req, res) => {
     channel.processWebhook(req)
     res.end()
@@ -140,7 +142,8 @@ const server = app.listen(0, async () => {
 
     tunnel = await localtunnel({
         port,
-        subdomain: process.env.TUNNEL_SUBDOMAIN
+        subdomain: process.env.TUNNEL_SUBDOMAIN,
+        host: `https://${process.env.TUNNEL_HOST}`
     })
 
     console.log(`listening port ${port}`)

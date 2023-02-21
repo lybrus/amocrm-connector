@@ -60,7 +60,7 @@ export class Channel extends EventEmitter {
         const {
             data: rawData,
             headers = {},
-            method = 'GET',
+            method = 'POST',
             url,
             dto,
             ...rest
