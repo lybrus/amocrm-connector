@@ -46,9 +46,10 @@ const token = {
 
     const client = new Client({
         integration,
-        subdomain: 'your_subdomain'
+        subdomain: 'your_subdomain',
+        token
     })
-  
+
     const accountInfo = await client.account.getAccountInfo()
 
     const channel = new Channel({
@@ -122,6 +123,7 @@ const token = {
 ##### Аккаунт
 
 ###### Методы
+
 * [account.getAccountInfo](src/integration/client/subsystems/account/account.ts#L19)
 
 ### Channel
@@ -161,8 +163,10 @@ const token = {
 1. Регистрация вашей интеграции
 2. Переход пользователя по ссылке выдачи доступа пользователем вашему приложению. Ссылку получить можно
    методом `integration.getOAuthLink`
-3. Обработка запроса на redirect uri, для этого должен быть запущен ваш сервер. Необходимо вызвать (пример для `express`) `integration.processOAuthRedirect(req.query)`.
-4. `integration` отправит в событие `setup` объект `client`. Процедура авторизации завершена (токен уже получен) и можно пользоваться интеграцией.
+3. Обработка запроса на redirect uri, для этого должен быть запущен ваш сервер. Необходимо вызвать (пример
+   для `express`) `integration.processOAuthRedirect(req.query)`.
+4. `integration` отправит в событие `setup` объект `client`. Процедура авторизации завершена (токен уже получен) и можно
+   пользоваться интеграцией.
 
 ## Ошибки и пожелания
 
