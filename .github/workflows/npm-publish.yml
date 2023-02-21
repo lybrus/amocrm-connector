@@ -24,7 +24,7 @@ jobs:
       - name: Start server for oauth processing
         run: yarn serve > server.out 2>server.err &
         env:
-          DOMAIN: ${{secrets.DOMAIN}}
+          SUBDOMAIN: ${{secrets.SUBDOMAIN}}
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
@@ -39,7 +39,7 @@ jobs:
       - name: Cypress tests
         uses: cypress-io/github-action@v5
         env:
-          DOMAIN: ${{secrets.DOMAIN}}
+          SUBDOMAIN: ${{secrets.SUBDOMAIN}}
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
           REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
           USERNAME: ${{secrets.USERNAME}}
