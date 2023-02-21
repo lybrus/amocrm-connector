@@ -14,15 +14,15 @@
 
 const domain = process.env.DOMAIN
 const integrationId = process.env.INTEGRATION_ID
-const tunnelSubdomain = process.env.TUNNEL_SUBDOMAIN
 const username = process.env.USERNAME
 const password = process.env.PASSWORD
+const redirectUri = process.env.REDIRECT_URI
 
 const { Integration } = require('../../')
 
 const integration = new Integration({
     integrationId,
-    redirectUri: `https://${ tunnelSubdomain }.loca.lt`
+    redirectUri
 })
 
 /**

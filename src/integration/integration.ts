@@ -1,11 +1,19 @@
 import { IntegrationCredential } from './integration-credential'
+import EventEmitter from 'events'
+import { Client } from './client'
 
-export class Integration {
+export interface IntegrationEventMap {
+    'setup': [Client, string]
+}
+
+export class Integration extends EventEmitter {
     integrationId: string
     secretKey: string
     redirectUri: string
 
     constructor(credential: IntegrationCredential) {
+        super()
+
         const {
             integrationId,
             secretKey,
@@ -20,5 +28,46 @@ export class Integration {
     getOAuthLink(state = '', mode: 'post_message' | 'popup' = 'post_message') {
         const { integrationId } = this
         return `https://www.amocrm.ru/oauth?client_id=${integrationId}&state=${state}&mode=${mode}`
+    }
+
+    async processOAuthRedirect(query: { [key: string]: string }) {
+        const referer = query['referer']
+        const code = query['code']
+        const integrationId = query['client_id']
+        const state = query['state']
+        if (!code || !referer || !integrationId || !state) return
+        if (integrationId !== this.integrationId) return
+
+        const match = referer.match(/([^.]*)\.(.*)/)
+        if (!match) return
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [_, domain, _base] = match
+        if (!domain) return
+        //TODO base kommo.com
+
+        const client = new Client({
+            integration: this,
+            domain
+        })
+
+        this.emit('setup', client, state)
+
+        await client.getToken({ code })
+    }
+
+    override on<Event extends keyof IntegrationEventMap>(event: Event, listener: (...value: IntegrationEventMap[Event]) => void): this
+    override on(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.on(event, listener)
+    }
+
+    override addListener<Event extends keyof IntegrationEventMap>(event: Event, listener: (...value: IntegrationEventMap[Event]) => void): this
+    override addListener(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.addListener(event, listener)
+    }
+
+    override removeListener<Event extends keyof IntegrationEventMap>(event: Event, listener: (...value: IntegrationEventMap[Event]) => void): this
+    override removeListener(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.addListener(event, listener)
     }
 }

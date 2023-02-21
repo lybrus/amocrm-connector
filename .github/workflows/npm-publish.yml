@@ -34,15 +34,16 @@ jobs:
         run: yarn tunnel > /dev/null &
         env:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+          TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
           SERVER_PORT: 3000
-#      - name: Cypress tests
-#        uses: cypress-io/github-action@v5
-#        env:
-#          DOMAIN: ${{secrets.DOMAIN}}
-#          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
-#          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-#          USERNAME: ${{secrets.USERNAME}}
-#          PASSWORD: ${{secrets.PASSWORD}}
+      - name: Cypress tests
+        uses: cypress-io/github-action@v5
+        env:
+          DOMAIN: ${{secrets.DOMAIN}}
+          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
+          REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
+          USERNAME: ${{secrets.USERNAME}}
+          PASSWORD: ${{secrets.PASSWORD}}
       - name: Archive screenshots (on failure)
         if: failure()
         run: tar -czvf screenshots.tar.gz cypress/screenshots

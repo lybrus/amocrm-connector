@@ -5,6 +5,8 @@ import EventEmitter from 'events'
 import { Request } from 'express'
 import { Chat } from './chat'
 import { DTO } from '~/dto'
+import { Client } from '~/integration'
+import { AccountWith } from '~/integration/client/subsystems'
 
 export type ChatCredential = {
     /**
@@ -90,13 +92,19 @@ export class Channel extends EventEmitter {
 
     /**
      * Connect channel to account
-     * @param amojoId Amo CRM account id for chat API
+     * @param account Client or amojoId of account
      * @param title? Channel title in account, default value this.title
      * @returns Chat instance connected to the account
      */
-    async connectChannel(amojoId: string, title?: string): Promise<Chat> {
+    async connectChannel(account: Client, title?: string): Promise<Chat>
+    async connectChannel(amojoId: string, title?: string): Promise<Chat>
+    async connectChannel(account: string | Client, title?: string): Promise<Chat> {
         const { id, title: defaultTitle } = this
         if (!title) title = defaultTitle
+        const amojoId = (account instanceof Client) ?
+            (await account.account.getAccountInfo(AccountWith.amojoId)).amojoId :
+            account
+
         const response = await this.post<{ scope_id: string }>(
             {
                 url: `/v2/origin/custom/${id}/connect`,
@@ -114,7 +122,7 @@ export class Channel extends EventEmitter {
         })
     }
 
-    handle(req: Request) {
+    processWebhook(req: Request) {
         const urlParts = req.originalUrl.split('/')
         const scopeId = urlParts[urlParts.length - 1]
         if (!scopeId) return

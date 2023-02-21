@@ -9,25 +9,27 @@
 *
 **/
 
-import AmoCRM from '..'
 import rawToken from '../testing/token.json'
-import Koa from 'koa'
-import Router from 'koa-router'
-import koaBody from 'koa-body'
+import express from 'express'
 import localtunnel from 'localtunnel'
-import {DeliveryErrorCode, DeliveryStatus} from '~/subsystems/Chat/DeliveryStatus'
-import {AccountWith} from '~/subsystems/Account'
-import {ChatWebhookMessageRequest, ChatWebhookTypingRequest} from '~/subsystems/Chat'
-import {MessageType} from '~/subsystems/Chat/MessageType'
-import {ChatWebhookMessage} from '../src/subsystems/Chat/Webhook/ChatWebhookMessage'
+import {
+    DeliveryErrorCode,
+    DeliveryStatus,
+    MessageType,
+    ChatWebhookMessage,
+    Integration,
+    Client, Channel, Chat
+} from '..'
 
 const domain = process.env.DOMAIN || ''
 const integrationId = process.env.INTEGRATION_ID || ''
 const secretKey = process.env.SECRET_KEY || ''
-const chatSecret = process.env.CHAT_SECRET || ''
-const chatId = process.env.CHAT_ID || ''
+const redirectUri = process.env.REDIRECT_URI || ''
 
-const {accessUntil, ...rest} = rawToken
+const chatId = process.env.CHAT_ID || ''
+const chatSecret = process.env.CHAT_SECRET || ''
+
+const { accessUntil, ...rest } = rawToken
 const token = {
     accessUntil: new Date(accessUntil),
     ...rest
@@ -35,61 +37,72 @@ const token = {
 
 let tunnel: localtunnel.Tunnel
 
-const amocrm = new AmoCRM({
-    credential: {
-        domain,
-        integrationId,
-        secretKey,
-        chatSecret,
-        chatId
-    },
+const integration = new Integration({
+    integrationId,
+    secretKey,
+    redirectUri
+})
+
+const client = new Client({
+    integration,
+    domain,
     token
+})
+
+const channel = new Channel({
+    chatId,
+    chatSecret,
+    title: 'Test channel'
 })
 
 const senderId = 'sender-id'
 
 ;(async () => {
-    const {amojoId} = await amocrm.account.get(AccountWith.amojoId)
-    if (!amojoId) return
-    const scopeId = await amocrm.chat.connectChannel(amojoId, 'Test channel')
+    const chat = await channel.connectChannel(client)
 
-    await amocrm.chat.addMessage(
-        scopeId,
-        {
-            date: new Date(),
-            conversationId: 'converstation-id',
-            sender: {
-                id: senderId,
-                name: 'Client name',
-                profile: {
-                    phone: '71234567890'
-                }
-            },
-            id: 'message-id',
-            message: {
-                type: MessageType.Text,
-                text: 'Message test'
+    await chat.addMessage(
+    {
+        date: new Date(),
+        conversationId: 'converstation-id',
+        sender: {
+            id: senderId,
+            name: 'Client name',
+            profile: {
+                phone: '71234567890'
             }
+        },
+        id: 'message-id',
+        message: {
+            type: MessageType.Text,
+            text: 'Message test'
         }
-    )
+    }
+)
 })()
 
-const app = new Koa()
-const router = new Router()
+channel.on('message', (chat, messageRequest) => {
+    sendReply(chat, messageRequest.message)
+})
 
-router.use(koaBody())
-app.use(router.routes())
+channel.on('typing', (chat, typingRequest) => {
+    const { typing: { conversation: { clientId: conversationId } } } = typingRequest.action
+
+    // Echo typing
+    chat.typing({
+        conversationId,
+        sender: { id: senderId }
+    })
+})
 
 
-const sendReply = async (scopeId: string, message: ChatWebhookMessage) => {
+const sendReply = async (chat: Chat, message: ChatWebhookMessage) => {
     const {
-        message: {id: messageId, text},
-        receiver: {clientId: senderId},
-        conversation: {clientId: conversationId}
+        message: { id: messageId, text },
+        receiver: { clientId: senderId },
+        conversation: { clientId: conversationId }
     } = message
 
-    await amocrm.chat.deliveryStatus(
-        scopeId,
+    await chat.deliveryStatus(
         messageId,
         {
             deliveryStatus: DeliveryStatus.Read,
@@ -98,8 +111,7 @@ const sendReply = async (scopeId: string, message: ChatWebhookMessage) => {
         }
     )
 
-    await amocrm.chat.addMessage(
-        scopeId,
+    await chat.addMessage(
         {
             date: new Date(),
             conversationId,
@@ -115,40 +127,16 @@ const sendReply = async (scopeId: string, message: ChatWebhookMessage) => {
     )
 }
 
-router.post('/amocrm-chat/:scopeId', async ctx => {
-    const {scopeId} = ctx.params
-    const {body: data, headers} = ctx.request
-    const {message, action} = data
-
-    if (!scopeId) return
-    if (!amocrm.chat.checkSignature(data, headers['x-signature'])) return
-
-    // New message webhook
-    if (message) {
-        const messageRequest = ChatWebhookMessageRequest.import(data)
-
-        sendReply(scopeId, messageRequest.message)
-    }
-
-    // Typing webhook
-    if (action) {
-        const typingRequest = ChatWebhookTypingRequest.import(data)
-
-        const {typing: {conversation: {clientId: conversationId}}} = typingRequest.action
-
-        // Echo typing
-        amocrm.chat.typing(scopeId, {
-            conversationId,
-            sender: {id: senderId}
-        })
-    }
-    ctx.status = 200
+const app = express()
+app.post('/amo/:scopeId', async (req, res) => {
+    channel.processWebhook(req)
+    res.end()
 })
 
 const server = app.listen(0, async () => {
     const address = server?.address()
     if (!address || typeof address === 'string') return
-    const {port} = address
+    const { port } = address
 
     tunnel = await localtunnel({
         port,
