@@ -9,8 +9,9 @@ export type OAuthToken = {
 
 export type ClientOptions = {
     integration: Integration,
-    domain: string,
+    subdomain: string,
     token?: OAuthToken,
+    mainDomain?: string
 }
 
 export type ClientRequestConfig<D = undefined> = AxiosRequestConfig<D> & {

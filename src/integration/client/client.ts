@@ -10,7 +10,8 @@ interface AmoCRMEventMap {
 
 export class Client extends EventEmitter {
     integration: Integration
-    domain: string
+    subdomain: string
+    mainDomain: string
     token?: OAuthToken
     account: Account = new Account(this)
 
@@ -19,12 +20,14 @@ export class Client extends EventEmitter {
 
         const {
             integration,
-            domain,
+            subdomain,
+            mainDomain = 'amocrm.ru',
             token
         } = options
 
         this.integration = integration
-        this.domain = domain
+        this.subdomain = subdomain
+        this.mainDomain = mainDomain
         this.token = token
     }
 
@@ -97,7 +100,7 @@ export class Client extends EventEmitter {
             headers = {},
             method = 'GET',
             url,
-            baseURL = `https://${this.domain}.amocrm.ru`,
+            baseURL = `https://${this.subdomain}.${this.mainDomain}`,
             ...rest
         } = config
         if (!url) throw new Error('url is required')

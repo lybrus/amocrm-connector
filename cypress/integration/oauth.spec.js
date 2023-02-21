@@ -1,4 +1,4 @@
-let password, username, domain
+let password, username, subdomain
 
 context('Actions', () => {
     beforeEach(async () => {
@@ -6,11 +6,11 @@ context('Actions', () => {
             link,
             password: p,
             username: u,
-            domain: d
+            subdomain: d
         } = await cy.task('getParameters')
         password = p
         username = u
-        domain = d
+        subdomain = d
 
         cy.visit(link)
     })
@@ -30,10 +30,10 @@ context('Actions', () => {
         cy.get('[type="submit"]')
             .click()
 
-        cy.get('select').select(domain)
+        cy.get('select').select(subdomain)
 
         cy.get('button.js-accept').click()
 
-        cy.get(':contains("Access granted!")', { timeout: 6000 })
+        cy.get('body').contains('Access granted!')
     })
 })

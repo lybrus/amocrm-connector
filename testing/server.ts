@@ -18,7 +18,7 @@ const app = express()
 app.get('/', async (req, res) => {
     await integration.processOAuthRedirect(req.query as { [key: string]: string })
 
-    return res.end('Access granted!')
+    return res.send('Access granted!')
 })
 const port = process.env.SERVER_PORT || 3000
 const server = app.listen(port, () => {

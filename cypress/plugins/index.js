@@ -12,7 +12,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-const domain = process.env.DOMAIN
+const subdomain = process.env.SUBDOMAIN
 const integrationId = process.env.INTEGRATION_ID
 const username = process.env.USERNAME
 const password = process.env.PASSWORD
@@ -39,7 +39,7 @@ module.exports = (on, config) => {
                 link,
                 username,
                 password,
-                domain
+                subdomain
             }
         }
     })

@@ -41,14 +41,13 @@ export class Integration extends EventEmitter {
         const match = referer.match(/([^.]*)\.(.*)/)
         if (!match) return
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [_, domain, _base] = match
-        if (!domain) return
-        //TODO base kommo.com
+        const [subdomain, mainDomain] = match.slice(1)
+        if (!subdomain || !mainDomain) return
 
         const client = new Client({
             integration: this,
-            domain
+            subdomain,
+            mainDomain
         })
 
         this.emit('setup', client, state)
