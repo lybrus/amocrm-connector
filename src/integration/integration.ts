@@ -50,9 +50,9 @@ export class Integration extends EventEmitter {
             mainDomain
         })
 
-        this.emit('setup', client, state)
-
         await client.getToken({ code })
+
+        this.emit('setup', client, state)
     }
 
     override on<Event extends keyof IntegrationEventMap>(event: Event, listener: (...value: IntegrationEventMap[Event]) => void): this

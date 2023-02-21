@@ -12,23 +12,24 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-const subdomain = process.env.SUBDOMAIN
-const integrationId = process.env.INTEGRATION_ID
-const username = process.env.USERNAME
-const password = process.env.PASSWORD
-const redirectUri = process.env.REDIRECT_URI
+import { Integration } from '../..'
 
-const { Integration } = require('../../')
+const subdomain = process.env.SUBDOMAIN || ''
+const integrationId = process.env.INTEGRATION_ID || ''
+const username = process.env.USERNAME || ''
+const password = process.env.PASSWORD || ''
+const redirectUri = process.env.REDIRECT_URI || ''
 
 const integration = new Integration({
     integrationId,
+    secretKey: '',
     redirectUri
 })
 
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on, config) => {
+export default (on, config) => {
     // `on` is used to hook into various events Cypress emits
     // `config` is the resolved Cypress config
     on('task', {

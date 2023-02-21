@@ -21,7 +21,7 @@ import {
     Client, Channel, Chat
 } from '..'
 
-const domain = process.env.DOMAIN || ''
+const subdomain = process.env.SUBDOMAIN || ''
 const integrationId = process.env.INTEGRATION_ID || ''
 const secretKey = process.env.SECRET_KEY || ''
 const redirectUri = process.env.REDIRECT_URI || ''
@@ -45,7 +45,7 @@ const integration = new Integration({
 
 const client = new Client({
     integration,
-    domain,
+    subdomain,
     token
 })
 

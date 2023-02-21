@@ -11,7 +11,8 @@ export const integration = new Integration({
 })
 
 integration.on('setup', (client) => {
-    client.on('token', saveToken)
+    if (!client.token) return
+    saveToken(client.token)
 })
 
 const app = express()
