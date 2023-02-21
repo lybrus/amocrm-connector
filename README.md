@@ -58,7 +58,7 @@ const token = {
         title: 'channel title'
     })
 
-    const chat = await channel.connectChannel(client)
+    const chat = await channel.connect(client)
 
     const result = await chat.addMessage({
             date: new Date(),
@@ -136,7 +136,7 @@ const token = {
 
 * [checkSignature](src/chat/channel.ts#L50)
 * [post](src/chat/channel.ts#L59)
-* [connectChannel](src/chat/channel.ts#L101)
+* [connect](src/chat/channel.ts#L101)
 * [processWebhook](src/chat/channel.ts#L125)
 * [on](src/chat/channel.ts#L154)
 * [removeListener](src/chat/channel.ts#L159)

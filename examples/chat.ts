@@ -59,7 +59,7 @@ const channel = new Channel({
 const senderId = 'sender-id'
 
 ;(async () => {
-    const chat = await channel.connectChannel(client)
+    const chat = await channel.connect(client)
 
     await chat.addMessage(
         {

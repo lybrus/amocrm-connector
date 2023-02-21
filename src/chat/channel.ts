@@ -96,9 +96,9 @@ export class Channel extends EventEmitter {
      * @param title? Channel title in account, default value this.title
      * @returns Chat instance connected to the account
      */
-    async connectChannel(account: Client, title?: string): Promise<Chat>
-    async connectChannel(amojoId: string, title?: string): Promise<Chat>
-    async connectChannel(account: string | Client, title?: string): Promise<Chat> {
+    async connect(account: Client, title?: string): Promise<Chat>
+    async connect(amojoId: string, title?: string): Promise<Chat>
+    async connect(account: string | Client, title?: string): Promise<Chat> {
         const { id, title: defaultTitle } = this
         if (!title) title = defaultTitle
         const amojoId = (account instanceof Client) ?
