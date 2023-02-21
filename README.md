@@ -28,7 +28,7 @@ yarn add amocrm-connector
 ### Пример использования
 
 ```typescript
-import { Integration, Client, Chat } from 'amocrm-connector'
+import { Integration, Client, Channel, Chat, MessageType } from 'amocrm-connector'
 import rawToken from './token.json'
 
 const { accessUntil, ...rest } = rawToken
