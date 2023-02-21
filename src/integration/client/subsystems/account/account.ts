@@ -13,6 +13,8 @@ export enum AccountWith {
 }
 
 export class Account extends Subsystem {
+    private amojoId?: string
+
     async getAccountInfo(...withParams: AccountWith[]): Promise<AccountInfo>
     async getAccountInfo(withParams: AccountWith[]): Promise<AccountInfo>
     async getAccountInfo(): Promise<AccountInfo>
@@ -27,5 +29,15 @@ export class Account extends Subsystem {
         })
 
         return AccountInfo.import(data)
+    }
+
+    async getAmojoId() {
+        if (this.amojoId) return this.amojoId
+
+        const { amojoId } = await this.getAccountInfo(AccountWith.amojoId)
+        if (!amojoId) throw new Error('amojoId shouln\'t be empty')
+        this.amojoId = amojoId
+
+        return amojoId
     }
 }

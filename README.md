@@ -125,6 +125,7 @@ const token = {
 ###### Методы
 
 * [account.getAccountInfo](src/integration/client/subsystems/account/account.ts#L19)
+* [account.getAmojoId](src/integration/client/subsystems/account/account.ts#L34)
 
 ### Channel
 
