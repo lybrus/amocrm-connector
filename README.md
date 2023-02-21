@@ -88,66 +88,66 @@ const token = {
 
 * [new Integration(options)](src/integration/integration.ts#L14)
 
-Объект является экземпляром `EventEmitter`, [события описаны здесь](#src/integration/integration.ts#L6)
+Объект является экземпляром `EventEmitter`, [события описаны здесь](src/integration/integration.ts#L6)
 
 #### Методы
 
-* [getOAuthLink](#src/integration/integration.ts#L28)
-* [processOAuthRedirect](#src/integration/integration.ts#L33)
-* [on](#src/integration/integration.ts#L59)
-* [addListener](#src/integration/integration.ts#L64)
-* [removeListener](#src/integration/integration.ts#L69)
+* [getOAuthLink](src/integration/integration.ts#L28)
+* [processOAuthRedirect](src/integration/integration.ts#L33)
+* [on](src/integration/integration.ts#L59)
+* [addListener](src/integration/integration.ts#L64)
+* [removeListener](src/integration/integration.ts#L69)
 
 ### Client
 
-* [new Client(options)](#src/integration/client/client.ts#L18)
+* [new Client(options)](src/integration/client/client.ts#L18)
 
-Объект является экземпляром `EventEmitter`, [события описаны здесь](#src/integration/client/client.ts#L7)
+Объект является экземпляром `EventEmitter`, [события описаны здесь](src/integration/client/client.ts#L7)
 
 #### Методы
 
-* [tokenIsActual](#src/integration/client/client.ts#L34)
-* [getToken](#src/integration/client/client.ts#L39)
-* [request](#src/integration/client/client.ts#L95)
-* [get](#src/integration/client/client.ts#L114)
-* [post](#src/integration/client/client.ts#L118)
-* [patch](#src/integration/client/client.ts#L122)
-* [delete](#src/integration/client/client.ts#L126)
-* [on](#src/integration/client/client.ts#L131)
-* [addListener](#src/integration/client/client.ts#L136)
-* [removeListener](#src/integration/client/client.ts#L141)
+* [tokenIsActual](src/integration/client/client.ts#L34)
+* [getToken](src/integration/client/client.ts#L39)
+* [request](src/integration/client/client.ts#L95)
+* [get](src/integration/client/client.ts#L114)
+* [post](src/integration/client/client.ts#L118)
+* [patch](src/integration/client/client.ts#L122)
+* [delete](src/integration/client/client.ts#L126)
+* [on](src/integration/client/client.ts#L131)
+* [addListener](src/integration/client/client.ts#L136)
+* [removeListener](src/integration/client/client.ts#L141)
 
 #### Подсистемы
 
 ##### Аккаунт
 
 ###### Методы
-* [account.getAccountInfo](#src/integration/client/subsystems/account/account.ts#L19)
+* [account.getAccountInfo](src/integration/client/subsystems/account/account.ts#L19)
 
 ### Channel
 
-* [new Channel(options)](#src/chat/channel.ts#L41)
+* [new Channel(options)](src/chat/channel.ts#L41)
 
-Объект является экземпляром `EventEmitter`, [события описаны здесь](#src/chat/channel.ts#L26)
+Объект является экземпляром `EventEmitter`, [события описаны здесь](src/chat/channel.ts#L26)
 
 #### Методы
 
-* [checkSignature](#src/chat/channel.ts#L50)
-* [post](#src/chat/channel.ts#L59)
-* [connectChannel](#src/chat/channel.ts#L101)
-* [processWebhook](#src/chat/channel.ts#L125)
-* [on](#src/chat/channel.ts#L154)
-* [removeListener](#src/chat/channel.ts#L159)
+* [checkSignature](src/chat/channel.ts#L50)
+* [post](src/chat/channel.ts#L59)
+* [connectChannel](src/chat/channel.ts#L101)
+* [processWebhook](src/chat/channel.ts#L125)
+* [on](src/chat/channel.ts#L154)
+* [removeListener](src/chat/channel.ts#L159)
 
 ### Chat
 
-* [new Chat(options)](#src/chat/chat.ts#L21)
+* [new Chat(options)](src/chat/chat.ts#L21)
 
 #### Методы
 
-* [addMessage](#src/chat/chat.ts#L28)
-* [deliveryStatus](#src/chat/chat.ts#L41)
-* [typing](#src/chat/chat.ts#L50)
+* [addMessage](src/chat/chat.ts#L28)
+* [deliveryStatus](src/chat/chat.ts#L41)
+* [typing](src/chat/chat.ts#L50)
 
 ### Авторизация
 
