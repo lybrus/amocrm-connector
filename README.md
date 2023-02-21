@@ -86,7 +86,7 @@ const token = {
 
 ### Integration
 
-* [new Integration(options)](#src/integration/integration.ts#L14)
+* [new Integration(options)](src/integration/integration.ts#L14)
 
 Объект является экземпляром `EventEmitter`, [события описаны здесь](#src/integration/integration.ts#L6)
 
