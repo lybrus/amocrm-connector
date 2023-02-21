@@ -16,7 +16,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "resolveJsonModule": true,
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "declaration": true,
         "noEmit": false,
         "strict": true,
@@ -39,7 +39,7 @@
         "skipLibCheck": true,
         "paths": {
             "~/*": [
-                "./*"
+                "./src/*"
             ]
         }
     },
