@@ -48,6 +48,8 @@ const token = {
         integration,
         subdomain: 'your_subdomain'
     })
+  
+    const accountInfo = await client.account.getAccountInfo()
 
     const channel = new Channel({
         chatId: 'chat id',
@@ -55,7 +57,7 @@ const token = {
         title: 'channel title'
     })
 
-    const chat = await chat.connectChannel(channel)
+    const chat = await channel.connectChannel(client)
 
     const result = await chat.addMessage({
             date: new Date(),
