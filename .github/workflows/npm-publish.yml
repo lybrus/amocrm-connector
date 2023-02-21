@@ -28,6 +28,7 @@ jobs:
           INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+          TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
           SERVER_PORT: 3000
           DEBUG: true
       - name: Start tunnel

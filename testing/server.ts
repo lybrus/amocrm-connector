@@ -7,7 +7,7 @@ import { saveToken } from './token-store'
 export const integration = new Integration({
     integrationId: process.env.INTEGRATION_ID || '',
     secretKey: process.env.SECRET_KEY || '',
-    redirectUri: process.env.REDIRECT_URI || `https://${process.env.TUNNEL_SUBDOMAIN}.loca.lt`
+    redirectUri: process.env.REDIRECT_URI || `https://${process.env.TUNNEL_SUBDOMAIN}.${process.env.TUNNEL_HOST}`
 })
 
 integration.on('setup', (client) => {
