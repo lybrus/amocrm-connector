@@ -34,6 +34,6 @@ context('Actions', () => {
 
         cy.get('button.js-accept').click()
 
-        cy.get('body').contains('Access granted!')
+        cy.contains('Access granted!')
     })
 })
