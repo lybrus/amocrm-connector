@@ -28,7 +28,7 @@ export interface ChatEvents {
     'typing': (chat: Chat, typingRequest: ChatWebhookTypingRequest) => void;
 }
 
-type ChatRequestConfig<D> = AxiosRequestConfig<D> & { dto?: typeof DTO }
+type ChatRequestConfig<D> = AxiosRequestConfig<D> & { dto?: typeof DTO, mainDomain?: string }
 
 /**
  * Main Chat API
@@ -56,16 +56,17 @@ export class Channel extends EventEmitter {
             .toLowerCase() === signature
     }
 
-    post<T = unknown, D = unknown>(config: ChatRequestConfig<D>): Promise<AxiosResponse<T, D>> {
+    request<T = unknown, D = unknown>(config: ChatRequestConfig<D>): Promise<AxiosResponse<T, D>> {
         const {
             data: rawData,
             headers = {},
             method = 'POST',
             url,
             dto,
+            mainDomain = 'amocrm.ru',
             ...rest
         } = config
-        const baseURL = 'https://amojo.amocrm.ru'
+        const baseURL = `https://amojo.${mainDomain}`
         const { secret } = this
 
         const data = (dto && rawData) ? dto.process(rawData) : rawData
@@ -88,6 +89,20 @@ export class Channel extends EventEmitter {
             .toLowerCase()
 
         return axios({ baseURL, headers, data, method, url, ...rest })
+    }
+
+    post<T = unknown, D = unknown>(config: ChatRequestConfig<D>): Promise<AxiosResponse<T, D>> {
+        return this.request({
+            ...config,
+            method: 'POST'
+        })
+    }
+
+    delete<T = unknown, D = unknown>(config: ChatRequestConfig<D>): Promise<AxiosResponse<T, D>> {
+        return this.request({
+            ...config,
+            method: 'DELETE'
+        })
     }
 
     /**
@@ -120,6 +135,24 @@ export class Channel extends EventEmitter {
             scopeId: response.data.scope_id,
             title
         })
+    }
+
+    async disconnect(account: Client): Promise<void>
+    async disconnect(amojoId: string): Promise<void>
+    async disconnect(account: string | Client): Promise<void> {
+        const { id } = this
+        const amojoId = (account instanceof Client) ?
+            (await account.account.getAccountInfo(AccountWith.amojoId)).amojoId :
+            account
+
+        await this.delete(
+            {
+                url: `/v2/origin/custom/${id}/disconnect`,
+                data: {
+                    account_id: amojoId
+                },
+            }
+        )
     }
 
     processWebhook(req: Request) {

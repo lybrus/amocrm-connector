@@ -64,12 +64,12 @@ const senderId = 'sender-id'
     await chat.addMessage(
         {
             date: new Date(),
-            conversationId: 'converstation-id2',
+            conversationId: 'converstation-id',
             sender: {
                 id: senderId,
                 name: 'Client name',
                 profile: {
-                    phone: '712345678901'
+                    phone: '71234567890'
                 }
             },
             id: 'message-id',
@@ -146,7 +146,7 @@ const server = app.listen(0, async () => {
         host: `https://${process.env.TUNNEL_HOST}`
     })
 
-    console.log(`listening port ${port}`)
+    console.log(`${tunnel.url} -> http://localhost:${port}`)
 })
 
 process.on('SIGTERM', () => {

@@ -136,21 +136,24 @@ const token = {
 #### Методы
 
 * [checkSignature](src/chat/channel.ts#L50)
-* [post](src/chat/channel.ts#L59)
-* [connect](src/chat/channel.ts#L101)
-* [processWebhook](src/chat/channel.ts#L125)
-* [on](src/chat/channel.ts#L154)
-* [removeListener](src/chat/channel.ts#L159)
+* [request](src/chat/channel.ts#L59)
+* [post](src/chat/channel.ts#L94)
+* [delete](src/chat/channel.ts#L101)
+* [connect](src/chat/channel.ts#L116)
+* [disconnect](src/chat/channel.ts#L142)
+* [processWebhook](src/chat/channel.ts#L158)
+* [on](src/chat/channel.ts#L187)
+* [removeListener](src/chat/channel.ts#L192)
 
 ### Chat
 
-* [new Chat(options)](src/chat/chat.ts#L21)
+* [new Chat(options)](src/chat/chat.ts#L23)
 
 #### Методы
 
-* [addMessage](src/chat/chat.ts#L28)
-* [deliveryStatus](src/chat/chat.ts#L41)
-* [typing](src/chat/chat.ts#L50)
+* [addMessage](src/chat/chat.ts#L34)
+* [deliveryStatus](src/chat/chat.ts#L48)
+* [typing](src/chat/chat.ts#L58)
 
 ### Авторизация
 
