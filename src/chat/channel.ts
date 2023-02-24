@@ -34,7 +34,7 @@ type ChatRequestConfig<D> = AxiosRequestConfig<D> & { dto?: typeof DTO, mainDoma
  * Main Chat API
  */
 export class Channel extends EventEmitter {
-    private id: string
+    id: string
     private secret: string
     public title: string
 
