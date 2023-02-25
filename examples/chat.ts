@@ -9,7 +9,7 @@
 *
 **/
 
-import rawToken from '../testing/token.json'
+import token from '../testing/token.json'
 import express from 'express'
 import bodyParser from 'body-parser'
 import localtunnel from 'localtunnel'
@@ -29,12 +29,6 @@ const redirectUri = process.env.REDIRECT_URI || ''
 
 const chatId = process.env.CHAT_ID || ''
 const chatSecret = process.env.CHAT_SECRET || ''
-
-const { accessUntil, ...rest } = rawToken
-const token = {
-    accessUntil: new Date(accessUntil),
-    ...rest
-}
 
 let tunnel: localtunnel.Tunnel
 
@@ -81,15 +75,15 @@ const senderId = 'sender-id'
     )
 })()
 
-channel.on('message', (chat, messageRequest) => {
-    sendReply(chat, messageRequest.message)
+channel.on('message', async (chat, messageRequest) => {
+    await sendReply(chat, messageRequest.message)
 })
 
-channel.on('typing', (chat, typingRequest) => {
+channel.on('typing', async (chat, typingRequest) => {
     const { typing: { conversation: { clientId: conversationId } } } = typingRequest.action
 
     // Echo typing
-    chat.typing({
+    await chat.typing({
         conversationId,
         sender: { id: senderId }
     })
@@ -122,7 +116,7 @@ const sendReply = async (chat: Chat, message: ChatWebhookMessage) => {
             id: 'message-id' + Math.random(),
             message: {
                 type: MessageType.Text,
-                text: `You typed "${text}"`
+                text: `You sent "${text}"`
             }
         }
     )

@@ -10,12 +10,16 @@ amocrm. :ok_hand:
 
 ## Описание
 
-Основные возможности:
+Основная идея. Взаимодействие с api происходит с помощью двух объектов:
+* `Integration` - объект создается на весь срок жизни приложения. Отвечает за методы интеграции в целом, а также обработку запросов со стороны amocrm.
+* `Client` - объект для взаимодействия с конкретной установкой интеграции для аккаунта. Например, для http сервера объект создается на каждый входящий запрос.
 
-* OAuth авторизация
-* Запросы к api
-* Частичное покрытие методов api
-* Работа с api чатов
+### Api чатов
+
+По аналогии с основным api, api чатов разделено на 2 части:
+
+* `Channel` - отвечает за обработку вебхуков, а также установку чата для аккаунта.
+* `Chat` - экземпляр чата, установленный для аккаунта.
 
 ## Начало работы
 
@@ -29,13 +33,7 @@ yarn add amocrm-connector
 
 ```typescript
 import { Integration, Client, Channel, Chat, MessageType } from 'amocrm-connector'
-import rawToken from './token.json'
-
-const { accessUntil, ...rest } = rawToken
-const token = {
-        accessUntil: new Date(accessUntil),
-        ...rest
-    }
+import token from './token.json'
 
 ;(async () => {
     const integration = new Integration({
@@ -49,8 +47,6 @@ const token = {
         subdomain: 'your_subdomain',
         token
     })
-
-    const accountInfo = await client.account.getAccountInfo()
 
     const channel = new Channel({
         chatId: 'chat id',
@@ -107,16 +103,16 @@ const token = {
 
 #### Методы
 
-* [tokenIsActual](src/integration/client/client.ts#L34)
-* [getToken](src/integration/client/client.ts#L39)
-* [request](src/integration/client/client.ts#L95)
-* [get](src/integration/client/client.ts#L114)
-* [post](src/integration/client/client.ts#L118)
-* [patch](src/integration/client/client.ts#L122)
-* [delete](src/integration/client/client.ts#L126)
-* [on](src/integration/client/client.ts#L131)
-* [addListener](src/integration/client/client.ts#L136)
-* [removeListener](src/integration/client/client.ts#L141)
+* [tokenIsActual](src/integration/client/client.ts#L41)
+* [getToken](src/integration/client/client.ts#L46)
+* [request](src/integration/client/client.ts#L102)
+* [get](src/integration/client/client.ts#L121)
+* [post](src/integration/client/client.ts#L125)
+* [patch](src/integration/client/client.ts#L129)
+* [delete](src/integration/client/client.ts#L133)
+* [on](src/integration/client/client.ts#L138)
+* [addListener](src/integration/client/client.ts#L143)
+* [removeListener](src/integration/client/client.ts#L148)
 
 #### Подсистемы
 

@@ -7,10 +7,14 @@ export type OAuthToken = {
     refresh: string,
 }
 
+export type OAuthRawToken = Omit<OAuthToken, 'accessUntil'> & {
+    accessUntil: string
+}
+
 export type ClientOptions = {
     integration: Integration,
     subdomain: string,
-    token?: OAuthToken,
+    token?: OAuthToken | OAuthRawToken,
     mainDomain?: string
 }
 

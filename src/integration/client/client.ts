@@ -28,7 +28,14 @@ export class Client extends EventEmitter {
         this.integration = integration
         this.subdomain = subdomain
         this.mainDomain = mainDomain
-        this.token = token
+
+        if (token) {
+            const { accessUntil, ...rest } = token
+            this.token = {
+                accessUntil: typeof accessUntil === 'string' ? new Date(accessUntil) : accessUntil,
+                ...rest
+            }
+        }
     }
 
     tokenIsActual(): boolean {
