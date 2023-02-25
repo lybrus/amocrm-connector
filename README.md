@@ -64,7 +64,7 @@ import token from './token.json'
                 id: 'sender-id',
                 name: 'Имя клиента',
                 profile: {
-                    phone: '71234567890'
+                    phone: '0123456789'
                 }
             },
             id: 'message-id',
