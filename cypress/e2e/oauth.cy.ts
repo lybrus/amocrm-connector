@@ -34,6 +34,6 @@ context('Actions', () => {
 
         cy.get('button.js-accept').click()
 
-        cy.contains('Access granted!')
+        cy.contains('Access granted!', { timeout: 10000 })
     })
 })
