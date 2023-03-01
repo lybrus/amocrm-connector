@@ -7,6 +7,7 @@ import { Chat } from './chat'
 import { DTO } from '~/dto'
 import { Client } from '~/integration'
 import { AccountWith } from '~/integration/client/subsystems'
+import { ChatEvents, filtersCheck, Subscribers } from './subscribers'
 
 export type ChatCredential = {
     /**
@@ -23,11 +24,6 @@ export type ChatCredential = {
     title: string,
 }
 
-export interface ChatEvents {
-    'message': (chat: Chat, messageRequest: ChatWebhookMessageRequest) => void;
-    'typing': (chat: Chat, typingRequest: ChatWebhookTypingRequest) => void;
-}
-
 type ChatRequestConfig<D> = AxiosRequestConfig<D> & { dto?: typeof DTO, mainDomain?: string }
 
 /**
@@ -36,6 +32,7 @@ type ChatRequestConfig<D> = AxiosRequestConfig<D> & { dto?: typeof DTO, mainDoma
 export class Channel extends EventEmitter {
     id: string
     private secret: string
+    private subscribers: Subscribers = {}
     public title: string
 
     constructor(chatCredentials: ChatCredential) {
@@ -184,13 +181,30 @@ export class Channel extends EventEmitter {
         }
     }
 
-    override on<U extends keyof ChatEvents>(event: U, listener: ChatEvents[U]): this {
-        super.on(event, listener)
+    override on<U extends keyof ChatEvents>(event: U, listener: ChatEvents[U]['cb'], filter?: ChatEvents[U]['filter']): this {
+        const listeners = this.subscribers[event] ?
+            this.subscribers[event] :
+            this.subscribers[event] = new Map() as Subscribers[U]
+        listeners?.set(listener, filter)
         return this
     }
 
-    override removeListener<U extends keyof ChatEvents>(event: U, listener: ChatEvents[U]): this {
-        super.removeListener(event, listener)
+    override removeListener<U extends keyof ChatEvents>(event: U, listener: ChatEvents[U]['cb']): this {
+        const listeners = this.subscribers[event]
+        if (!listeners) return this
+        listeners.delete(listener)
         return this
+    }
+
+    override emit<U extends keyof ChatEvents>(event: U, ...args: Parameters<ChatEvents[U]['cb']>): boolean {
+        const listeners = this.subscribers[event]
+        if (!listeners) return false
+        for (const [listener, filter] of listeners.entries()) {
+            if (filter && !filtersCheck[event](args, filter)) continue
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            listener(...args)
+        }
+        return true
     }
 }

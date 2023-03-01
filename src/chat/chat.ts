@@ -11,6 +11,10 @@ export type ChatOptions = {
     mainDomain?: string
 }
 
+export type ChatDescription = {
+    scopeId: string
+}
+
 /**
  * Main Chat API
  */

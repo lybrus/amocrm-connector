@@ -125,31 +125,31 @@ import token from './token.json'
 
 ### Channel
 
-* [new Channel(options)](src/chat/channel.ts#L41)
+* [new Channel(options)](src/chat/channel.ts#L38)
 
-Объект является экземпляром `EventEmitter`, [события описаны здесь](src/chat/channel.ts#L26)
+Объект является экземпляром `EventEmitter`, [события описаны здесь](src/chat/subscribers.ts#L8)
 
 #### Методы
 
-* [checkSignature](src/chat/channel.ts#L50)
-* [request](src/chat/channel.ts#L59)
-* [post](src/chat/channel.ts#L94)
-* [delete](src/chat/channel.ts#L101)
-* [connect](src/chat/channel.ts#L116)
-* [disconnect](src/chat/channel.ts#L142)
-* [processWebhook](src/chat/channel.ts#L158)
-* [on](src/chat/channel.ts#L187)
+* [checkSignature](src/chat/channel.ts#L47)
+* [request](src/chat/channel.ts#L56)
+* [post](src/chat/channel.ts#L91)
+* [delete](src/chat/channel.ts#L98)
+* [connect](src/chat/channel.ts#L113)
+* [disconnect](src/chat/channel.ts#L141)
+* [processWebhook](src/chat/channel.ts#L155)
+* [on](src/chat/channel.ts#L184)
 * [removeListener](src/chat/channel.ts#L192)
 
 ### Chat
 
-* [new Chat(options)](src/chat/chat.ts#L23)
+* [new Chat(options)](src/chat/chat.ts#L27)
 
 #### Методы
 
-* [addMessage](src/chat/chat.ts#L34)
-* [deliveryStatus](src/chat/chat.ts#L48)
-* [typing](src/chat/chat.ts#L58)
+* [addMessage](src/chat/chat.ts#L38)
+* [deliveryStatus](src/chat/chat.ts#L52)
+* [typing](src/chat/chat.ts#L62)
 
 ### Авторизация
 
