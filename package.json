@@ -1,7 +1,7 @@
 {
     "name": "amocrm-connector",
     "description": "AmoCRM api connector for Node.js",
-    "version": "0.4.10",
+    "version": "0.4.11",
     "repository": "git@github.com:lybrus/amocrm-connector.git",
     "homepage": "git@github.com:lybrus/amocrm-connector.git",
     "author": "Damir Rashidov <damir@rashidov.eu>",

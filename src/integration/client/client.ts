@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { ClientRequestConfig, OAuthToken, ClientOptions } from './types'
-import { Account } from './subsystems'
+import { Account, Calls } from './subsystems'
 import { Integration } from '~/integration'
 import EventEmitter from 'events'
 
@@ -14,6 +14,7 @@ export class Client extends EventEmitter {
     mainDomain: string
     token?: OAuthToken
     account: Account = new Account(this)
+    calls: Calls = new Calls(this)
 
     constructor(options: ClientOptions) {
         super()
@@ -103,14 +104,17 @@ export class Client extends EventEmitter {
         const {
             useToken = true,
             ifModifiedSince,
-            data,
+            data: rawData,
             headers = {},
             method = 'GET',
             url,
             baseURL = `https://${this.subdomain}.${this.mainDomain}`,
+            dto,
             ...rest
         } = config
         if (!url) throw new Error('url is required')
+
+        const data = (dto && rawData) ? dto.process(rawData) : rawData
 
         if (useToken && this.token?.access) headers['Authorization'] = `Bearer ${this.token.access}`
         if (ifModifiedSince) headers['If-Modified-Since'] = ifModifiedSince.toUTCString()

@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { Integration } from '~/integration'
+import { DTO } from '~/dto'
 
 export type OAuthToken = {
     access: string,
@@ -21,4 +22,5 @@ export type ClientOptions = {
 export type ClientRequestConfig<D = undefined> = AxiosRequestConfig<D> & {
     useToken?: boolean,
     ifModifiedSince?: Date,
+    dto?: typeof DTO
 }
