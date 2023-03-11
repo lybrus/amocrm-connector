@@ -103,16 +103,16 @@ import token from './token.json'
 
 #### Методы
 
-* [tokenIsActual](src/integration/client/client.ts#L41)
-* [getToken](src/integration/client/client.ts#L46)
-* [request](src/integration/client/client.ts#L102)
-* [get](src/integration/client/client.ts#L121)
-* [post](src/integration/client/client.ts#L125)
-* [patch](src/integration/client/client.ts#L129)
-* [delete](src/integration/client/client.ts#L133)
-* [on](src/integration/client/client.ts#L138)
-* [addListener](src/integration/client/client.ts#L143)
-* [removeListener](src/integration/client/client.ts#L148)
+* [tokenIsActual](src/integration/client/client.ts#L42)
+* [getToken](src/integration/client/client.ts#L47)
+* [request](src/integration/client/client.ts#L103)
+* [get](src/integration/client/client.ts#L125)
+* [post](src/integration/client/client.ts#L129)
+* [patch](src/integration/client/client.ts#L134)
+* [delete](src/integration/client/client.ts#L137)
+* [on](src/integration/client/client.ts#L142)
+* [addListener](src/integration/client/client.ts#L147)
+* [removeListener](src/integration/client/client.ts#L152)
 
 #### Подсистемы
 
@@ -122,6 +122,12 @@ import token from './token.json'
 
 * [account.getAccountInfo](src/integration/client/subsystems/account/account.ts#L19)
 * [account.getAmojoId](src/integration/client/subsystems/account/account.ts#L34)
+
+##### Звонки
+
+###### Методы
+
+* [calls.add](src/integration/client/subsystems/calls/calls.ts#L7)
 
 ### Channel
 
