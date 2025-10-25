@@ -44,7 +44,7 @@ export class Client extends EventEmitter {
         return !!accessUntil && new Date() < accessUntil
     }
 
-    async getToken({ code, refreshToken }: { code?: string, refreshToken?: string }) {
+    async getToken({ code, refreshToken }: { code?: string, refreshToken?: string } = {}) {
         const {
             integrationId,
             secretKey,
@@ -64,6 +64,14 @@ export class Client extends EventEmitter {
 
         if (refreshToken) {
             data['refresh_token'] = refreshToken
+            data['grant_type'] = 'refresh_token'
+        }
+
+        const { token } = this
+
+        if (!code && !refreshToken && token) {
+            const { refresh } = token
+            data['refresh_token'] = refresh
             data['grant_type'] = 'refresh_token'
         }
 
