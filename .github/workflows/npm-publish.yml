@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: yarn --frozen-lockfile
@@ -37,14 +36,14 @@ jobs:
           TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
           TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
           SERVER_PORT: 3000
-#      - name: Cypress tests
-#        uses: cypress-io/github-action@v5
-#        env:
-#          SUBDOMAIN: ${{secrets.SUBDOMAIN}}
-#          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
-#          REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
-#          USERNAME: ${{secrets.USERNAME}}
-#          PASSWORD: ${{secrets.PASSWORD}}
+      - name: Cypress tests
+        uses: cypress-io/github-action@v6
+        env:
+          SUBDOMAIN: ${{secrets.SUBDOMAIN}}
+          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
+          REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
+          USERNAME: ${{secrets.USERNAME}}
+          PASSWORD: ${{secrets.PASSWORD}}
       - name: Archive screenshots (on failure)
         if: failure()
         run: tar -czvf screenshots.tar.gz cypress/screenshots
