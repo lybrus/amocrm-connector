@@ -27,7 +27,7 @@ context('Actions', () => {
                 log: false
             })
 
-        cy.get('[type="submit"]')
+        cy.get('[type="submit"]').first()
             .click()
 
         cy.get('select').select(subdomain)
