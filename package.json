@@ -34,7 +34,7 @@
         "dotenv-cli": "^10.0.0",
         "eslint": "^9.38.0",
         "express": "^5.1.0",
-        "frp-cli_": "^0.1.4",
+        "frp-cli_": "^0.1.5",
         "jest": "^30.2.0",
         "localtunnel": "^2.0.2",
         "module-alias": "^2.2.3",

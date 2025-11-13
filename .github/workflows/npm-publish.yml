@@ -12,7 +12,7 @@ env:
   SECRET_KEY: ${{secrets.SECRET_KEY}}
   REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
   TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-  TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
+  FRP_SERVER: ${{secrets.TUNNEL_HOST}}
   SERVER_PORT: 3000
   USERNAME: ${{secrets.USERNAME}}
   PASSWORD: ${{secrets.PASSWORD}}
