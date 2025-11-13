@@ -37,7 +37,9 @@ jobs:
         env:
           DEBUG: true
       - name: Start tunnel
-        run: yarn tunnel:frp > /dev/null &
+        run: |
+          echo $SERVER_PORT
+          yarn tunnel:frp > /dev/null &
       - name: Cypress tests
         uses: cypress-io/github-action@v6
       - name: Archive screenshots (on failure)
