@@ -1,7 +1,9 @@
 import { Prop, DTO } from '~/dto'
 import { MessageType } from './message-type'
+import { DeliveryStatus } from '~/chat/delivery-status'
+import { MessageSharedPost } from './message-shared-post'
 
-class AddMessageContentLocation extends DTO {
+export class AddMessageContentLocation extends DTO {
     @Prop()
     lon!: number
 
@@ -9,7 +11,7 @@ class AddMessageContentLocation extends DTO {
     lat!: number
 }
 
-class AddMessageContentContact extends DTO {
+export class AddMessageContentContact extends DTO {
     @Prop()
     name!: string
 
@@ -17,7 +19,7 @@ class AddMessageContentContact extends DTO {
     phone!: string
 }
 
-export class AddMessageContent extends DTO {
+export class MessageRequestContent extends DTO {
     @Prop({ enum: MessageType })
     type!: MessageType
 
@@ -34,8 +36,23 @@ export class AddMessageContent extends DTO {
     fileSize?: number
 
     @Prop({ optional: true })
+    stickerId?: string
+
+    @Prop({ optional: true })
     location?: AddMessageContentLocation
 
     @Prop({ optional: true })
     contact?: AddMessageContentContact
+
+    @Prop()
+    callbackData?: string
+
+    @Prop({ optional: true })
+    deliverStatus?: DeliveryStatus
+
+    @Prop()
+    mediaDuration?: number
+
+    @Prop({ optional: true })
+    sharedPost?: MessageSharedPost
 }

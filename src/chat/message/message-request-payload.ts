@@ -1,11 +1,16 @@
 import { Prop, DateSerializerTimestamp, DateSerializerUnixTime, DTO } from '~/dto'
-import { AddMessageSource } from './add-message-source'
+import { MessageRequestSource } from './message-request-source'
 import { MessageParticipant } from './message-participant'
-import { AddMessageContent } from './add-message-content'
+import { MessageRequestContent } from './message-request-content'
+import { MessageReplyTo } from './message-reply-to'
+import { MessageForwards } from './message-forwards'
 
-export class AddMessagePayload extends DTO {
+export class MessageRequestPayload extends DTO {
     @Prop('msgid')
     id!: string
+
+    @Prop({ rawPropertyName: 'id', optional: true })
+    refId?: string
 
     @Prop([
         { rawPropertyName: 'timestamp', serializer: DateSerializerTimestamp },
@@ -23,7 +28,7 @@ export class AddMessagePayload extends DTO {
     silent = false
 
     @Prop({ optional: true })
-    source!: AddMessageSource
+    source!: MessageRequestSource
 
     @Prop()
     sender!: MessageParticipant
@@ -32,5 +37,11 @@ export class AddMessagePayload extends DTO {
     receiver?: MessageParticipant
 
     @Prop()
-    message!: AddMessageContent
+    message!: MessageRequestContent
+
+    @Prop({ optional: true })
+    replyTo?: MessageReplyTo
+
+    @Prop({ optional: true })
+    forwards?: MessageForwards
 }

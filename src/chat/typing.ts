@@ -1,10 +1,17 @@
 import { DTO, Prop } from '~/dto'
-import { MessageParticipant } from './message'
+
+class TypingRequestSender extends DTO {
+    @Prop()
+    id!: string
+}
 
 export class TypingRequest extends DTO {
     @Prop()
     conversationId!: string
 
     @Prop()
-    sender!: MessageParticipant
+    sender!: TypingRequestSender
+
+    @Prop()
+    durationMs?: number
 }

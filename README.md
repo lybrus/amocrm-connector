@@ -120,14 +120,14 @@ import token from './token.json'
 
 ###### Методы
 
-* [account.getAccountInfo](src/integration/client/subsystems/account/account.ts#L19)
-* [account.getAmojoId](src/integration/client/subsystems/account/account.ts#L34)
+* [account.getAccountInfo](src/integration/client/services/account/account.ts#L19)
+* [account.getAmojoId](src/integration/client/services/account/account.ts#L34)
 
 ##### Звонки
 
 ###### Методы
 
-* [calls.add](src/integration/client/subsystems/calls/calls.ts#L7)
+* [calls.add](src/integration/client/services/calls/calls.ts#L7)
 
 ### Channel
 

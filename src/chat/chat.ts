@@ -1,8 +1,9 @@
-import { JSONObject, DTOLike } from '~/dto'
-import { AddMessagePayload, AddMessageResponse } from './message'
+import { DTOLike, JSONObject } from '~/dto'
+import { MessageRequestEventType, MessageRequestPayload, MessageRequestResponse } from './message'
 import { DeliveryStatusRequest } from './delivery-status'
 import { TypingRequest } from './typing'
 import { Channel } from './channel'
+import { CreateConversationRequest, CreateConversationResponse } from './conversation'
 
 export type ChatOptions = {
     channel: Channel,
@@ -35,18 +36,39 @@ export class Chat {
         this.mainDomain = mainDomain
     }
 
-    async addMessage(addMessagePayload: DTOLike<AddMessagePayload>): Promise<AddMessageResponse> {
-        const addMessagePayloadImported = AddMessagePayload.create(addMessagePayload)
+    async createConversation(request: CreateConversationRequest): Promise<CreateConversationResponse> {
+        const { channel, scopeId, mainDomain } = this
+
+        const { data } = await channel.post<JSONObject>(
+            {
+                url: `/v2/origin/custom/${scopeId}/chats`,
+                mainDomain,
+                data: MessageRequestPayload.export(request)
+            }
+        )
+
+        return CreateConversationResponse.import(data)
+    }
+
+    async messageRequest(
+        payload: DTOLike<MessageRequestPayload>,
+        eventType: MessageRequestEventType = MessageRequestEventType.NewMessage): Promise<MessageRequestResponse>
+    {
+        const addMessagePayloadImported = MessageRequestPayload.create(payload)
         const { channel, scopeId, mainDomain } = this
         const { data } = await channel.post<JSONObject>(
             {
                 url: `/v2/origin/custom/${scopeId}`,
                 mainDomain,
-                data: { event_type: 'new_message', payload: AddMessagePayload.export(addMessagePayloadImported) }
+                data: { event_type: eventType, payload: MessageRequestPayload.export(addMessagePayloadImported) }
             }
         )
 
-        return AddMessageResponse.import(data)
+        return MessageRequestResponse.import(data)
+    }
+
+    async addMessage(payload: DTOLike<MessageRequestPayload>): Promise<MessageRequestResponse> {
+        return this.messageRequest(payload)
     }
 
     async deliveryStatus(messageId: string, deliveryStatusRequest: DTOLike<DeliveryStatusRequest>): Promise<void> {
@@ -67,5 +89,9 @@ export class Chat {
             data: typingRequest,
             dto: TypingRequest
         })
+    }
+
+    async getHistory() {
+
     }
 }

@@ -1,9 +1,9 @@
 import { DTOLike, JSONObject } from '~/dto'
-import { Subsystem } from '../subsystem'
+import { Service } from '~/service'
 import { AddCallRequest } from './add-call-request'
 import { AddCallResponse } from './add-call-response'
 
-export class Calls extends Subsystem {
+export class Calls extends Service {
     async add(calls: DTOLike<AddCallRequest> | DTOLike<AddCallRequest>[]): Promise<AddCallResponse[]> {
         const { client } = this
         const data = AddCallRequest.process(calls instanceof Array ? calls : [calls])

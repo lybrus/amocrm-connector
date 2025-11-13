@@ -1,18 +1,18 @@
-import { Subsystem } from '../subsystem'
+import { Service } from '~/service'
 import { JSONObject } from '~/dto'
 import { AccountInfo } from './account-info'
 
 export enum AccountWith {
-    amojoId = 'amojo_id',
-    amojoRights = 'amojo_rights',
-    usersGroups = 'users_groups',
-    taskTypes = 'task_types',
-    version = 'version',
-    entityNames = 'entity_names',
-    datetimeSettings = 'datetime_settings'
+    AmojoId = 'amojo_id',
+    AmojoRights = 'amojo_rights',
+    UsersGroups = 'users_groups',
+    TaskTypes = 'task_types',
+    Version = 'version',
+    EntityNames = 'entity_names',
+    DatetimeSettings = 'datetime_settings'
 }
 
-export class Account extends Subsystem {
+export class Account extends Service {
     private amojoId?: string
 
     async getAccountInfo(...withParams: AccountWith[]): Promise<AccountInfo>
@@ -34,7 +34,7 @@ export class Account extends Subsystem {
     async getAmojoId() {
         if (this.amojoId) return this.amojoId
 
-        const { amojoId } = await this.getAccountInfo(AccountWith.amojoId)
+        const { amojoId } = await this.getAccountInfo(AccountWith.AmojoId)
         if (!amojoId) throw new Error('amojoId shouln\'t be empty')
         this.amojoId = amojoId
 

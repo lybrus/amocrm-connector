@@ -7,20 +7,26 @@
 * yarn tunnel (public address for your server)
 * yarn cypress (run OAuth test)
 *
+* stop server, this application uses the same port
+*
 **/
-
+import 'reflect-metadata'
 import token from '../testing/token.json'
 import express from 'express'
 import bodyParser from 'body-parser'
-import localtunnel from 'localtunnel'
 import {
+    Channel,
+    Chat,
+    ChatWebhookMessage,
+    Client,
     DeliveryErrorCode,
     DeliveryStatus,
-    MessageType,
-    ChatWebhookMessage,
     Integration,
-    Client, Channel, Chat
+    MessageType,
+    LeadWithParams
 } from '..'
+
+// import { isClassLikeDeclaration } from 'ts-api-utils'
 
 const subdomain = process.env.SUBDOMAIN || ''
 const integrationId = process.env.INTEGRATION_ID || ''
@@ -29,8 +35,7 @@ const redirectUri = process.env.REDIRECT_URI || ''
 
 const chatId = process.env.CHAT_ID || ''
 const chatSecret = process.env.CHAT_SECRET || ''
-
-let tunnel: localtunnel.Tunnel
+const chatPath = process.env.CHAT_PATH || '/amo/:scopeId'
 
 const integration = new Integration({
     integrationId,
@@ -50,9 +55,15 @@ const channel = new Channel({
     title: 'Test channel'
 })
 
-const senderId = 'sender-id'
+let typingSenderId: string | undefined = undefined
 
 ;(async () => {
+    for await(const lead of client.leads.iterateAll({
+        withParams: [LeadWithParams.Contacts]
+    })) {
+        console.log(lead)
+    }
+
     const chat = await channel.connect(client)
 
     await chat.addMessage(
@@ -60,7 +71,7 @@ const senderId = 'sender-id'
             date: new Date(),
             conversationId: 'converstation-id',
             sender: {
-                id: senderId,
+                id: 'sender-id',
                 name: 'Client name',
                 profile: {
                     phone: '71234567890'
@@ -80,12 +91,13 @@ channel.on('message', async (chat, messageRequest) => {
 })
 
 channel.on('typing', async (chat, typingRequest) => {
-    const { typing: { conversation: { clientId: conversationId } } } = typingRequest.action
+    if (!typingSenderId) return
 
+    const { typing: { conversation: { clientId: conversationId } } } = typingRequest.action
     // Echo typing
     await chat.typing({
         conversationId,
-        sender: { id: senderId }
+        sender: { id: typingSenderId }
     })
 })
 
@@ -96,6 +108,8 @@ const sendReply = async (chat: Chat, message: ChatWebhookMessage) => {
         receiver: { clientId: senderId },
         conversation: { clientId: conversationId }
     } = message
+
+    typingSenderId = senderId
 
     await chat.deliveryStatus(
         messageId,
@@ -124,27 +138,17 @@ const sendReply = async (chat: Chat, message: ChatWebhookMessage) => {
 
 const app = express()
 app.use(bodyParser.json())
-app.post('/amo/:scopeId', async (req, res) => {
+app.post(chatPath, async (req, res) => {
     channel.processWebhook(req)
     res.end()
 })
 
-const server = app.listen(0, async () => {
+const server = app.listen(process.env.SERVER_PORT, async () => {
     const address = server?.address()
     if (!address || typeof address === 'string') return
-    const { port } = address
-
-    tunnel = await localtunnel({
-        port,
-        subdomain: process.env.TUNNEL_SUBDOMAIN,
-        host: `https://${process.env.TUNNEL_HOST}`
-    })
-
-    console.log(`${tunnel.url} -> http://localhost:${port}`)
 })
 
 process.on('SIGTERM', () => {
-    tunnel.close()
     server.close(() => {
         process.exit(0)
     })

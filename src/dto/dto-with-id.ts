@@ -5,8 +5,8 @@ export type DTOIdType = number | string
 
 const getIdPropertyName = (amoEntity: DTOWithId<any>): string => {
     const entityDescription = metadataStore.getEntityDescription(Object.getPrototypeOf(amoEntity))
-    if (!entityDescription) throw new Error('Entity should have id property')
     const { idPropertyName } = entityDescription
+    if (!idPropertyName) throw new Error(`Entity ${Object.getPrototypeOf(amoEntity).name} must have id property`)
     return idPropertyName
 }
 

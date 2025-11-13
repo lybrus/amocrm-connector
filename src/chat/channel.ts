@@ -6,7 +6,6 @@ import { Request } from 'express'
 import { Chat } from './chat'
 import { DTO } from '~/dto'
 import { Client } from '~/integration'
-import { AccountWith } from '~/integration/client/subsystems'
 import { ChatEvents, filtersCheck, Subscribers } from './subscribers'
 
 export type ChatCredential = {
@@ -104,18 +103,19 @@ export class Channel extends EventEmitter {
 
     /**
      * Connect channel to account
-     * @param account Client or amojoId of account
-     * @param title? Channel title in account, default value this.title
+     * @param client Client or amojoId of account
+     * @param title Channel title in account, default value this.title
+     * @param isTimeWindowDisabled Indicates if time window enabled or now, default value false
      * @returns Chat instance connected to the account
      */
-    async connect(account: Client, title?: string): Promise<Chat>
-    async connect(amojoId: string, title?: string): Promise<Chat>
-    async connect(account: string | Client, title?: string): Promise<Chat> {
+    async connect(client: Client, title?: string, isTimeWindowDisabled?: boolean): Promise<Chat>
+    async connect(amojoId: string, title?: string, isTimeWindowDisabled?: boolean): Promise<Chat>
+    async connect(client: string | Client, title?: string, isTimeWindowDisabled = false): Promise<Chat> {
         const { id, title: defaultTitle } = this
         if (!title) title = defaultTitle
-        const amojoId = (account instanceof Client) ?
-            (await account.account.getAccountInfo(AccountWith.amojoId)).amojoId :
-            account
+        const amojoId = (client instanceof Client) ?
+            (await client.account.getAmojoId()) :
+            client
 
         const response = await this.post<{ scope_id: string }>(
             {
@@ -123,7 +123,8 @@ export class Channel extends EventEmitter {
                 data: {
                     account_id: amojoId,
                     title,
-                    hook_api_version: 'v2'
+                    hook_api_version: 'v2',
+                    is_time_window_disabled: isTimeWindowDisabled
                 },
             }
         )
@@ -139,7 +140,7 @@ export class Channel extends EventEmitter {
     async disconnect(account: string | Client): Promise<void> {
         const { id } = this
         const amojoId = (account instanceof Client) ?
-            (await account.account.getAccountInfo(AccountWith.amojoId)).amojoId :
+            (await account.account.getAmojoId()) :
             account
 
         await this.delete(

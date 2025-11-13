@@ -6,6 +6,18 @@ on:
   schedule:
     - cron: '0 6 * * *'
 
+env:
+  SUBDOMAIN: ${{secrets.SUBDOMAIN}}
+  INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
+  SECRET_KEY: ${{secrets.SECRET_KEY}}
+  REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
+  TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
+  TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
+  SERVER_PORT: 3000
+  USERNAME: ${{secrets.USERNAME}}
+  PASSWORD: ${{secrets.PASSWORD}}
+  FRP_TOKEN: ${{secrets.FRP_TOKEN}}
+
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -23,27 +35,11 @@ jobs:
       - name: Start server for oauth processing
         run: yarn serve > server.out 2>server.err &
         env:
-          SUBDOMAIN: ${{secrets.SUBDOMAIN}}
-          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
-          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-          TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
-          SERVER_PORT: 3000
           DEBUG: true
       - name: Start tunnel
-        run: yarn tunnel > /dev/null &
-        env:
-          TUNNEL_SUBDOMAIN: ${{secrets.TUNNEL_SUBDOMAIN}}
-          TUNNEL_HOST: ${{secrets.TUNNEL_HOST}}
-          SERVER_PORT: 3000
+        run: yarn tunnel:frp > /dev/null &
       - name: Cypress tests
         uses: cypress-io/github-action@v6
-        env:
-          SUBDOMAIN: ${{secrets.SUBDOMAIN}}
-          INTEGRATION_ID: ${{secrets.INTEGRATION_ID}}
-          REDIRECT_URI: https://${{secrets.TUNNEL_SUBDOMAIN}}.${{secrets.TUNNEL_HOST}}
-          USERNAME: ${{secrets.USERNAME}}
-          PASSWORD: ${{secrets.PASSWORD}}
       - name: Archive screenshots (on failure)
         if: failure()
         run: tar -czvf screenshots.tar.gz cypress/screenshots

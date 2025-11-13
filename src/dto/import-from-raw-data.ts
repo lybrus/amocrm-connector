@@ -31,7 +31,7 @@ export const importFromRawData = <T extends typeof DTO>(targetClass: T, rawData:
         if (!rawPropertyName) continue
 
         const rawValue = rawData[rawPropertyName]
-        if (!rawValue) continue
+        if (rawValue === undefined || rawValue === null) continue
 
         result[propName as keyof InstanceType<T>] = loadValue(propertyDescription, rawValue)
     }

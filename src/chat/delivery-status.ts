@@ -17,13 +17,7 @@ export enum DeliveryErrorCode {
 }
 
 export class DeliveryStatusRequest extends DTO {
-    @Prop()
-    scopeId!: string
-
-    @Prop()
-    messageId!: string
-
-    @Prop({ enum: DeliveryStatus })
+    @Prop({ enum: DeliveryStatus, rawPropertyName: 'status_code' })
     deliveryStatus!: DeliveryStatus
 
     @Prop({ enum: DeliveryErrorCode })

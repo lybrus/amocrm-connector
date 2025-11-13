@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from 'axios'
 import { ClientRequestConfig, OAuthToken, ClientOptions } from './types'
-import { Account, Calls } from './subsystems'
+import { Account, Calls } from '~/services'
 import { Integration } from '~/integration'
 import EventEmitter from 'events'
+import { LeadService } from '~/entities/lead'
 
 interface AmoCRMEventMap {
     'token': OAuthToken
@@ -15,6 +16,7 @@ export class Client extends EventEmitter {
     token?: OAuthToken
     account: Account = new Account(this)
     calls: Calls = new Calls(this)
+    leads: LeadService = new LeadService(this)
 
     constructor(options: ClientOptions) {
         super()

@@ -1,6 +1,6 @@
 import { Prop, DTO } from '~/dto'
 
-export class AddMessageSource extends DTO {
+export class MessageRequestSource extends DTO {
     @Prop()
     externalId!: string
 }

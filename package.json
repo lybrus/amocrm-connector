@@ -34,11 +34,13 @@
         "dotenv-cli": "^10.0.0",
         "eslint": "^9.38.0",
         "express": "^5.1.0",
+        "frp-cli_": "^0.1.4",
         "jest": "^30.2.0",
         "localtunnel": "^2.0.2",
         "module-alias": "^2.2.3",
         "resolve-tspaths": "^0.8.23",
         "ts-node": "^10.9.2",
+        "tsx": "^4.20.6",
         "typescript": "^5.9.3"
     },
     "scripts": {
@@ -51,10 +53,13 @@
         "cypress": "dotenv -e .env.test cypress run",
         "serve:auto": "ts-node --  testing/server.ts",
         "serve": "dotenv -e .env.test yarn serve:auto",
-        "tunnel:auto": "yarn run lt -p $SERVER_PORT -s $TUNNEL_SUBDOMAIN",
-        "tunnel": "dotenv -e .env.test yarn tunnel:auto",
+        "tunnel:frp:auto": "yarn run frpc http -l $SERVER_PORT --sd $TUNNEL_SUBDOMAIN -s $TUNNEL_HOST -n amocrm-connector-dev",
+        "tunnel:lt:auto": "yarn run lt -p $SERVER_PORT -s $TUNNEL_SUBDOMAIN -h $TUNNEL_HOST",
+        "tunnel:lt": "dotenv -e .env.test yarn tunnel:lt:auto",
+        "tunnel:frp": "dotenv -e .env.test yarn tunnel:frp:auto",
+        "tunnel": "yarn tunnel:frp",
         "test": "yarn cypress",
-        "example-chat": "dotenv -e .env.test ts-node examples/chat.ts",
+        "example-chat": "dotenv -e .env.test ts-node examples/chat.ts -- --project tsconfig.json",
         "lint": "eslint \"src/**/*.ts\" --fix"
     }
 }
