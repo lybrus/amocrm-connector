@@ -53,7 +53,7 @@
         "cypress": "dotenv -e .env.test cypress run",
         "serve:auto": "ts-node --  testing/server.ts",
         "serve": "dotenv -e .env.test yarn serve:auto",
-        "tunnel:frp:auto": "yarn run frpc http -l $SERVER_PORT --sd $TUNNEL_SUBDOMAIN -s $TUNNEL_HOST -n amocrm-connector-dev",
+        "tunnel:frp:auto": "yarn run frpc http -l $SERVER_PORT --sd $TUNNEL_SUBDOMAIN -s $TUNNEL_HOST -n $FRP_NAME",
         "tunnel:lt:auto": "yarn run lt -p $SERVER_PORT -s $TUNNEL_SUBDOMAIN -h $TUNNEL_HOST",
         "tunnel:lt": "dotenv -e .env.test yarn tunnel:lt:auto",
         "tunnel:frp": "dotenv -e .env.test yarn tunnel:frp:auto",

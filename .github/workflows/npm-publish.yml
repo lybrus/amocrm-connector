@@ -17,6 +17,7 @@ env:
   USERNAME: ${{secrets.USERNAME}}
   PASSWORD: ${{secrets.PASSWORD}}
   FRP_TOKEN: ${{secrets.FRP_TOKEN}}
+  FRP_NAME: ${{secrets.FRP_NAME}}
 
 jobs:
   main:
