@@ -2608,10 +2608,10 @@ fresh@^2.0.0:
   resolved "https://registry.npmjs.org/fresh/-/fresh-2.0.0.tgz"
   integrity sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==
 
-frp-cli_@^0.1.5:
+frp-cli@^0.1.5:
   version "0.1.5"
-  resolved "https://registry.yarnpkg.com/frp-cli_/-/frp-cli_-0.1.5.tgz#ff088d60073ec8efe80acc0b4fe1e77c98829d45"
-  integrity sha512-TMFYlOk7CRx4j8zzHqh7T985FAlasWmzyxnnoEl8GtT59Y7teb5X8fVU+7d1e2IgMRrE1Fz9a5Kentiq5dhagA==
+  resolved "https://registry.yarnpkg.com/frp-cli/-/frp-cli-0.1.5.tgz#afce74fae54a85426edce4a9043bde386864cb21"
+  integrity sha512-LQA7KYt+4RY7n6RxRFPzXWnRKDI+Q4Y9ws1ncJmjQgwjfl4pFQ48zauOJwdaG4nI/PZ23Wu55suml13lXQcmgA==
   dependencies:
     axios "^1.12.2"
     tar "^7.5.1"
